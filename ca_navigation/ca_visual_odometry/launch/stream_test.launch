@@ -1,8 +1,5 @@
 <launch>
-    <arg name="cam_name" value="raspicam"/>
-    <env name="GSCAM_CONFIG" value="udpsrc port=9000 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert"/>
-    <node pkg="gscam" type="gscam" name="$(arg cam_name)">
-        <param name="camera_name" value="$(arg cam_name)"/>
-        <remap from="camera/image_raw" to="$(arg cam_name)/image_raw"/>
-    </node>
+    <include file="$(find ca_visual_odometry)/launch/cam_mapping.launch"/>
+    
+    <node pkg="image_view" type="image_view" name="$(arg cam_name)_stream_test" args="image:=$(arg cam_topic)"/>
 </launch>
