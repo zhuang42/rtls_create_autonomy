@@ -6,7 +6,6 @@ find_package(catkin REQUIRED)
 catkin_package(
   CATKIN_DEPENDS
     joy_teleop
-    rospy
     geometry_msgs
 )
 
