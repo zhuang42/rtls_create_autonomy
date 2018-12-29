@@ -7,6 +7,7 @@ catkin_package(
   CATKIN_DEPENDS
     joy_teleop
     geometry_msgs
+    rospy
 )
 
 install(DIRECTORY config launch
