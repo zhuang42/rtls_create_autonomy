@@ -1,0 +1,12 @@
+<launch>
+    <!-- gscam to receive frames from raspicam and remaping them to a ROS topic -->
+    <arg name="cam_name" value="raspicam"/>
+    <arg name="cam_topic" value="/$(arg cam_name)/image_raw"/>
+
+    <env name="GSCAM_CONFIG" value="udpsrc port=9000 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert"/>
+
+    <node pkg="gscam" type="gscam" name="$(arg cam_name)">
+        <param name="camera_name" value="$(arg cam_name)"/>
+        <remap from="camera/image_raw" to="$(arg cam_topic)"/>
+    </node>
+</launch>
