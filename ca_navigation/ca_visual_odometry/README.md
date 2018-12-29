@@ -10,7 +10,7 @@ So, the graph of our system looks like this:
 
 ![System architecture](media/architecture.png)
 
-As you can see in this picture, we have Raspberry Camera connected and raspicam creating multimedia pipeline and sending video from camera to `gst-launch`. The latter then transmit the image to our server over UDP. gscam will broadcast the video to `/raspicam/image_raw` topic. This image should be rectified with `image_proc` node. And finally, rectified image is taken by `mono_odometer`, which handles it and computes position and orientation of the robot publishing this data straight to the `/vision/pose` topic.
+As you can see in this picture, we have Raspberry Camera connected and raspicam creating multimedia pipeline and sending video from camera to `gst-launch`. The latter then transmit the image to our server over UDP. [gscam](https://github.com/RoboticaUtnFrba/gscam) will broadcast the video to `/raspicam/image_raw` topic. This image should be rectified with `image_proc` node. And finally, rectified image is taken by `mono_odometer`, which handles it and computes position and orientation of the robot publishing this data straight to the `/vision/pose` topic.
 
 ## Preparing the environment
 
@@ -21,7 +21,8 @@ This tutorial will consider that you already have the hardware conected. For ful
 Firstly, ssh **into Raspberry** and start broadcasting video **to our server**:
 
 ```sh
-$ raspivid -n -w 640 -h 480 -b 1000000 -fps 40 -t 0 -o - | gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink host=<IP> port=9000
+$ roscd ca_visual_odometry/scripts
+$ ./stream_raspicam <HOST_IP>
 ```
 
 Find the IP of the server using `ifconfig`.
@@ -59,3 +60,12 @@ As you move the checkerboard around you will see three bars on the calibration s
 
 Calibration can take about a minute. The windows might be greyed out but just wait, it is working.
 
+ You will need to move the generated .yaml file that's in `/tmp/calibrationdata.tar.gz`. Extract and rename it to `ost.yaml` and move it to the `ca_visual_odometry/config` directory.
+
+ Then you can execute the visual odometry doing this:
+
+ ```
+ $ roslaunch ca_visual_odometry vo_raspicam.launch rviz:=true
+ ```
+
+ This will rectify the image and will use [viso2](https://github.com/RoboticaUtnFrba/viso2).
