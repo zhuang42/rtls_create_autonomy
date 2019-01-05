@@ -1,13 +1,19 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(ca_gazebo)
+if( ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm" )
+  message( STATUS "Avoid compiling ca_gazebo because of the ARM architecture" )
+else()
+  cmake_minimum_required(VERSION 2.8.3)
+  project(ca_gazebo)
 
-find_package(gazebo REQUIRED)
+  find_package(gazebo REQUIRED)
 
-catkin_package()
+  catkin_package()
 
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
+  include_directories(
+    ${catkin_INCLUDE_DIRS}
+  )
 
-install(DIRECTORY launch worlds
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+  install(DIRECTORY launch worlds
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+  message(STATUS "ca_gazebo compiled")
+endif()
