@@ -1,0 +1,2 @@
+#!/bin/bash
+ROS_NAMESPACE=raspicam rosrun image_proc image_proc
