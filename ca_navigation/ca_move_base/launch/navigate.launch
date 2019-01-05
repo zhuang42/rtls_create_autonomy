@@ -14,8 +14,8 @@
 	<include file="$(find ca_move_base)/launch/move_base.launch" />
 
 	<!-- RViz -->
-	<group if="$(arg rviz)">
-		<node type="rviz" name="rviz" pkg="rviz" args="-d $(find ca_move_base)/rviz/navigation.rviz" required="false"/>
-	</group>
-  
+	<include if="$(arg rviz)" file="$(find ca_tools)/launch/rviz.launch">
+    <arg name="config_file" value="$(find ca_move_base)/rviz/navigation.rviz"/>
+  </include>
+
 </launch>
