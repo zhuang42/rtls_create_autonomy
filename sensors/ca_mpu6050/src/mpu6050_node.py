@@ -48,7 +48,7 @@ z_gyro_offset = int(rospy.get_param('~z_gyro', 0))
 enable_debug_output = int(rospy.get_param('~debug', True))
 
 i2c_bus = int(rospy.get_param('~i2c_bus', 1))
-device_address = int(rospy.get_param('~device_addr', 0x68), 16)
+device_address = int(rospy.get_param('~device_addr', 0x68))
 
 r = rospy.Rate(sample_rate)
 
@@ -94,7 +94,7 @@ while not rospy.is_shutdown():
         grav = mpu.DMP_get_gravity(quat)
         lin_accel = mpu.DMP_get_linear_accel(accel, grav)
         # roll_pitch_yaw = mpu.DMP_get_euler_roll_pitch_yaw(quat, grav)
-        # gyro = mpu.get_rotation()
+        gyro = mpu.get_rotation()
 
         now = rospy.Time.now()
 
