@@ -1,22 +1,6 @@
 frequency: 10
 frame_id: "imu_link"
 
-ax: 0
-ay: 0
-az: 0
-gx: 0
-gy: 0
-gz: 0
-
-# The offsets are different for each device and should be changed
-# accordingly using a calibration procedure
-x_acc: -5489
-y_acc: -1441
-z_acc: 1305
-x_gyro: -2
-y_gyro: -72
-z_gyro: -5
-
-
+# Hardware parameters
 i2c_bus: 1
 device_addr: 0x68
