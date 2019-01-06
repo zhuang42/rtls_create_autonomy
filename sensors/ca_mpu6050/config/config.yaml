@@ -1,0 +1,10 @@
+frequency: 10
+frame_id: "imu_link"
+ax: 0
+ay: 0
+az: 0
+gx: 0
+gy: 0
+gz: 0
+
+# TODO: ADD CALIBRATION CONSTANTS
