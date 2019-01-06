@@ -92,7 +92,7 @@ while not rospy.is_shutdown():
         grav = mpu.DMP_get_gravity(quat)
         lin_accel = mpu.DMP_get_linear_accel(accel, grav)
         # roll_pitch_yaw = mpu.DMP_get_euler_roll_pitch_yaw(quat, grav)
-        gyro = mpu.DMP_get_rotation()
+        # gyro = mpu.get_rotation()
 
         now = rospy.Time.now()
 
@@ -100,13 +100,14 @@ while not rospy.is_shutdown():
         imu_msg.header.stamp = now
         imu_msg.header.frame_id = frame_id
 
-        imu_msg.linear_acceleration.x = lin_accel.x / lin_acc_rescale
-        imu_msg.linear_acceleration.y = lin_accel.y / lin_acc_rescale
-        imu_msg.linear_acceleration.z = lin_accel.z / lin_acc_rescale
+        imu_msg.linear_acceleration.x = lin_accel.x * lin_acc_rescale
+        imu_msg.linear_acceleration.y = lin_accel.y * lin_acc_rescale
+        imu_msg.linear_acceleration.z = lin_accel.z * lin_acc_rescale
 
-        imu_msg.angular_velocity.x = gyro[0]
-        imu_msg.angular_velocity.y = gyro[1]
-        imu_msg.angular_velocity.z = gyro[2]
+        # At default sensitivity of 250deg/s we need to scale by 131.
+        imu_msg.angular_velocity.x = gyro[0] / 131.
+        imu_msg.angular_velocity.y = gyro[1] / 131.
+        imu_msg.angular_velocity.z = gyro[2] / 131.
 
         imu_pub.publish(imu_msg)
 
