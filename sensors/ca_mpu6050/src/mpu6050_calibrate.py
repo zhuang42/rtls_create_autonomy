@@ -8,7 +8,7 @@ import numpy as np
 class MPU6050Calibration(object):
 
     def __init__(self):
-        rospy.init_node('mpu6050_calibration')
+        rospy.init_node('mpu6050_calibration', log_level=rospy.INFO)
         rospy.on_shutdown(self.__shutdown_cb)
 
         # The offsets are different for each device and should be changed
