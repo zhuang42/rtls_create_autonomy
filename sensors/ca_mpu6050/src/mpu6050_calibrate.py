@@ -43,8 +43,8 @@ class MPU6050Calibration(object):
 
     def __mean_sensors(self):
         # Variables to keep track of the readings
-        self.ROT = np.zeros(3)
-        self.ACCEL = np.zeros(3)
+        ROT = np.zeros(3)
+        ACCEL = np.zeros(3)
         # Number of samples that will be discarded at the beginning
         n_discard = 100
         for measure in xrange(self.buffer_size + n_discard):
