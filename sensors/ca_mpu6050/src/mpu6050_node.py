@@ -27,18 +27,6 @@ from sensor_msgs.msg import Imu
 
 lin_acc_rescale = 9.80665 / 16384.
 
-i2c_bus = 1
-device_address = 0x68
-# The offsets are different for each device and should be changed
-# accordingly using a calibration procedure
-x_accel_offset = -5489
-y_accel_offset = -1441
-z_accel_offset = 1305
-x_gyro_offset = -2
-y_gyro_offset = -72
-z_gyro_offset = -5
-enable_debug_output = True
-
 DEFAULT_SAMPLE_RATE_HZ = 10
 MPU_FRAMEID = "imu_link"
 
@@ -47,6 +35,20 @@ imu_pub = rospy.Publisher('imu/data', Imu, queue_size=10)
 
 sample_rate = int(rospy.get_param('~frequency', DEFAULT_SAMPLE_RATE_HZ))
 frame_id = str(rospy.get_param('~frame_id', MPU_FRAMEID))
+
+# The offsets are different for each device and should be changed
+# accordingly using a calibration procedure
+x_accel_offset = int(rospy.get_param('~x_acc', 0))
+y_accel_offset = int(rospy.get_param('~y_acc', 0))
+z_accel_offset = int(rospy.get_param('~z_acc', 0))
+x_gyro_offset = int(rospy.get_param('~x_gyro', 0))
+y_gyro_offset = int(rospy.get_param('~y_gyro', 0))
+z_gyro_offset = int(rospy.get_param('~z_gyro', 0))
+
+enable_debug_output = int(rospy.get_param('~debug', True))
+
+i2c_bus = int(rospy.get_param('~i2c_bus', 1))
+device_address = int(rospy.get_param('~device_addr', 0x68), 16)
 
 r = rospy.Rate(sample_rate)
 

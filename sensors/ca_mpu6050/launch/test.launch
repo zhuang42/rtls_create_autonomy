@@ -7,5 +7,6 @@
   <!-- RViz -->
   <include file="$(find ca_tools)/launch/rviz.launch">
     <arg name="config_file" value="$(find ca_mpu6050)/rviz/mpu6050.rviz"/>
+    <param name="~debug" value="true"/>
   </include>
 </launch>
