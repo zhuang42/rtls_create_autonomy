@@ -49,8 +49,8 @@ class MPU6050Calibration(object):
         n_discard = 100
         for measure in xrange(self.buffer_size + n_discard):
             # Read raw accel and gyro measurements
-            rot = mpu.get_rotation()
-            acc = mpu.get_acceleration()
+            rot = self.mpu.get_rotation()
+            acc = self.mpu.get_acceleration()
             # Discard first "n_discard" measurement
             if measure > n_discard:
                 ROT += rot
