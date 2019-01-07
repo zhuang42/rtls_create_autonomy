@@ -1,6 +1,4 @@
 <launch>
-  <node name="robot_network_config" pkg="ca_bringup" type="robot_network_config.sh" output="screen"/>
-
   <include file="$(find ca_node)/launch/create_2.launch"/>
 
   <node name="raspicam_stream" pkg="ca_visual_odometry" type="stream_raspicam"/>
