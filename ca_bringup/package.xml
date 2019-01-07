@@ -10,8 +10,8 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <run_depend>controller_manager</run_depend>
-  <run_depend>ca_node</run_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>ca_node</exec_depend>
 
   <export>
   </export>
