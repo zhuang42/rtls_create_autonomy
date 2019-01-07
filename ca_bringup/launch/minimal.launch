@@ -1,0 +1,12 @@
+<launch>
+  <include file="$(find ca_node)/launch/create_2.launch"/>
+
+  <node name="robot_network_config" pkg="ca_bringup" type="robot_network_config.sh"/>
+  <node name="raspicam_stream" pkg="ca_visual_odometry" type="stream_raspicam"/>
+
+  <!-- TODO: Add sensors:
+  * MPU6050
+  * Intel RealSense R200
+  * RPLidar A2
+ -->
+</launch>
