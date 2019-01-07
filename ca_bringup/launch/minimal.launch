@@ -1,0 +1,12 @@
+<launch>
+  <arg name="raspicam_receiver_IP" default=""/>
+  <include file="$(find ca_node)/launch/create_2.launch"/>
+
+  <node name="raspicam_stream" pkg="ca_visual_odometry" type="stream_raspicam" args="$(arg raspicam_receiver_IP)" output="screen"/>
+
+  <!-- TODO: Add sensors:
+  * MPU6050
+  * Intel RealSense R200
+  * RPLidar A2
+ -->
+</launch>
