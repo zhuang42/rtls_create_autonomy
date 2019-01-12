@@ -8,8 +8,8 @@
 	<!-- Run the map server with a blank map -->
   	<node name="map_server" pkg="map_server" type="map_server" args="$(find ca_move_base)/maps/blank_map.yaml"/>
 
-  	<!-- Run a static transform between /odom and /map -->
-  	<node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
+	<!-- Run a static transform between /odom and /map -->
+	<node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
 
 	<include file="$(find ca_move_base)/launch/move_base.launch" />
 
