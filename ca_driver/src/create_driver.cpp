@@ -123,35 +123,10 @@ CreateDriver::CreateDriver(ros::NodeHandle& nh, ros::NodeHandle& ph)
   diagnostics_.setHardwareID(robot_model_name);
 
   ROS_INFO("[CREATE] Ready.");
-//  uint8_t notes_0 [] = {59,59,59,59,62,61,61,59,59,59,59};
-//  float durations_0 [] = {1.0,0.75,0.25,1.0,0.75,0.25,0.7,0.25,0.7,0.25,1.0};
-
-
-//  uint8_t notes_1 [] = {79,86,84,83,81,91,86,84,83,81,91,86,84,83,84,81};
-//  float durations_1 [] = {0.9,0.8,0.2,0.2,0.2,0.8,0.7,0.2,0.2,0.2,0.8,0.7,0.2,0.2,0.2,0.9}; 
-//{1.0,1.0,0.25,0.25,0.25,1.0,1.0,0.25,0.25,0.25,1.0,1.0,0.25,0.25,0.25,1.0};
-// {1.0,1.0,0.25,0.25,0.25,1.0,0.75,0.25,0.25,0.25,1.0,0.75,0.25,0.25,0.25,0.75}; 
-
-
-// uint8_t notes_2 [] = {105,103,100,96,98,107,101,108,105,103,100,96,98,107,103,108};
-//  float durations_2 [] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
-
-
-//  uint8_t notes_3 [] = {84,107,84,107,84,107,84,107,84,107,84,107,84,107,84,107};
-//  float durations_3 [] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
-
-
-//  uint8_t notes_4 [] = {64,54};
-//  float durations_4 [] = {1.0,1.0};
-
-
-
 
   robot_->defineSong(0, SONG_0_LENGTH, SONG_0_NOTES, SONG_0_DURATIONS);
   robot_->defineSong(1, SONG_1_LENGTH, SONG_1_NOTES, SONG_1_DURATIONS);
   robot_->defineSong(2, SONG_2_LENGTH, SONG_2_NOTES, SONG_2_DURATIONS);
-
-//usleep(1000000);
 }
 
 CreateDriver::~CreateDriver()
@@ -329,7 +304,6 @@ void CreateDriver::updateBatteryDiagnostics(diagnostic_updater::DiagnosticStatus
   stat.add("Temperature (Celsius)", robot_->getTemperature());
   stat.add("Current (A)", robot_->getCurrent());
   stat.add("Voltage (V)", robot_->getVoltage());
-  
 
   switch (charging_state)
   {
@@ -729,4 +703,3 @@ int main(int argc, char** argv)
   }
   return 0;
 }
-
