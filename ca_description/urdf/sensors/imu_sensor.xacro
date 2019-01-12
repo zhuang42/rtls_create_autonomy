@@ -10,8 +10,8 @@
   <xacro:property name="link_name" value="gyro_link"/>
 
   <xacro:property name="x" value="0"/>
-  <xacro:property name="y" value="0"/>
-  <xacro:property name="z" value="0.04"/>
+  <xacro:property name="y" value="-0.04"/>
+  <xacro:property name="z" value="0.1"/>
   <xacro:property name="R" value="0"/>
   <xacro:property name="P" value="0"/>
   <xacro:property name="Y" value="0"/>
