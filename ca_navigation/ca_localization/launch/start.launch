@@ -1,6 +1,0 @@
-<launch>
-  <!-- Run the EKF for map to odom config -->
-  <node pkg="robot_localization" type="ekf_localization_node" node="efk_localization_without_gps" clear_params="true">
-    <rosparam command="load" file="$(find ca_localization)/config/ekf_localization.yaml"/>
-  </node>
-</launch>
