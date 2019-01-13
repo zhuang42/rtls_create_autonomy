@@ -32,7 +32,7 @@ Before launching the node you have to configure the proper environmental variabl
 
 ```sh
 $ roscd ca_bringup/scripts
-$ ./robot_network_config.sh
+$ source robot_network_config.sh
 $ roslaunch ca_bringup minimal.launch raspicam_receiver_IP:=<COMPUTER_IP>
 ```
 
@@ -44,7 +44,7 @@ Configure the ROS network variables:
 
 ```sh
 $ roscd ca_bringup/scripts
-$ ./remote_access_config.sh <ROBOT_IP>
+$ source remote_access_config.sh <ROBOT_IP>
 ```
 
 After this step, you can test the raspicam for example:
