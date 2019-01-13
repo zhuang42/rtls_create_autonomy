@@ -31,7 +31,8 @@ This process will request you the password.
 Before launching the node you have to configure the proper environmental variables.
 
 ```sh
-$ rosrun ca_bringup robot_network_config.sh
+$ roscd ca_bringup/scripts
+$ ./robot_network_config.sh
 $ roslaunch ca_bringup minimal.launch raspicam_receiver_IP:=<COMPUTER_IP>
 ```
 
@@ -42,7 +43,8 @@ You can get you computer IP doing: `hostname -I`.
 Configure the ROS network variables:
 
 ```sh
-$ rosrun ca_bringup remote_access_config.sh <ROBOT_IP>
+$ roscd ca_bringup/scripts
+$ ./remote_access_config.sh <ROBOT_IP>
 ```
 
 After this step, you can test the raspicam for example:

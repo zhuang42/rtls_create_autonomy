@@ -1,0 +1,22 @@
+<launch>
+  <arg name="use_nodelets"    default="false" />
+  <arg name="nodelet_manager" default="$optenv robot_localization_NODELET_MANAGER robot_localization_nodelet_manager)" />
+
+   <!--  Placeholder for output topic remapping
+    <remap from="odometry/filtered" to=""/>
+    <remap from="accel/filtered" to=""/>
+    -->
+
+  <node unless="$(arg use_nodelets)"
+        pkg="robot_localization" type="ekf_localization_node"
+        name="ekf_se" clear_params="true" output="screen">
+    <rosparam command="load" file="$(find ca_localization)/config/ekf_localization.yaml" />
+  </node>
+
+  <node if="$(arg use_nodelets)"
+    pkg="nodelet" type="nodelet"
+    name="ekf_se" output="screen"
+    args="load RobotLocalization/EkfNodelet $(arg nodelet_manager)">
+    <rosparam command="load" file="$(find ca_localization)/config/ekf_localization.yaml" />
+  </node>
+</launch>
