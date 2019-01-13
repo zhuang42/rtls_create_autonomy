@@ -7,7 +7,7 @@ if [[ -z $1 ]]; then
 	return
 fi
 
-COMPUTER_IP=$(ip a s|sed -ne '/127.0.0.1/!{s/^[ \t]*inet[ \t]*\([0-9.]\+\)\/.*$/\1/p}')
+COMPUTER_IP=`hostname -I | cut --delimiter " " --fields 1`
 ROBOT_IP=$1
 
 echo "Configuring ROS Networking on a remote machine [IP: $COMPUTER_IP]"
