@@ -1,7 +1,7 @@
 <launch>
   <!-- Static publisher between IMU link and map -->
   <node pkg="tf" type="static_transform_publisher" name="imu_to_map_tf"
-        args="0 0 0 0 0 0 1 map imu_link 100" />
+        args="0 0 0 0 0 0 1 map gyro_link 100" />
   <!-- MPU6050 node -->
   <include file="$(find ca_mpu6050)/launch/mpu6050.launch"/>
   <!-- RViz -->
