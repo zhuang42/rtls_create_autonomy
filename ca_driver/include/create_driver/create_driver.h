@@ -47,8 +47,8 @@ static const uint8_t SONG_4_LENGTH = 16;
 static const uint8_t SONG_4_NOTES [] = {79,86,84,83,81,91,86,84,83,81,91,86,84,83,84,81};
 static const float SONG_4_DURATIONS [] = {0.9,0.8,0.2,0.2,0.2,0.8,0.7,0.2,0.2,0.2,0.8,0.7,0.2,0.2,0.2,0.9};
 
-
-static const double MAX_DBL = std::numeric_limits<double>::max();
+// Unused covariances must have a large value
+static const double MAX_DBL = 1e10;
 static const double COVARIANCE[36] = {1e-5, 1e-5, 0.0,     0.0,     0.0,     1e-5,
                                       1e-5, 1e-5, 0.0,     0.0,     0.0,     1e-5,
                                       0.0,  0.0,  MAX_DBL, 0.0,     0.0,     0.0,
