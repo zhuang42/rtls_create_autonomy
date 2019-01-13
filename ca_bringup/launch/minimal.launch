@@ -1,9 +1,14 @@
 <launch>
   <arg name="raspicam_receiver_IP" default=""/>
+
   <include file="$(find ca_node)/launch/create_2.launch"/>
 
-  <node name="raspicam_stream" pkg="ca_visual_odometry" type="stream_raspicam" args="$(arg raspicam_receiver_IP)" output="screen"/>
+  <!-- raspicam -->
+  <include if="$(eval arg('raspicam_receiver_IP') != '')" file="$(find ca_visual_odometry)/launch/raspicam_stream.launch">
+    <arg name="IP" value="$(arg raspicam_receiver_IP)"/>
+  </include>
 
+  <!-- IMU -->
   <include file="$(find ca_mpu6050)/launch/mpu6050.launch"/>
 
   <!-- TODO: Add sensors:
