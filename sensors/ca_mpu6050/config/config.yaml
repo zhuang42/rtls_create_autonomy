@@ -1,5 +1,5 @@
-frequency: 10
-frame_id: "imu_link"
+frequency: 20
+frame_id: "gyro_link"
 
 # Hardware parameters
 i2c_bus: 1
