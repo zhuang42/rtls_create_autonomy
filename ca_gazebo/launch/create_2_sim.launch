@@ -20,6 +20,7 @@
 		<arg name="paused" value="$(arg paused)"/>
 		<arg name="use_sim_time" value="true"/>
 		<arg name="verbose" value="true"/>
+		<arg name="world_name" value="$(find ca_gazebo)/worlds/clearpath_playpen.world"/>
 	</include>
 
 	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
