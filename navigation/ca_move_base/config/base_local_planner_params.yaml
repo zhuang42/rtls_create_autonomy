@@ -38,4 +38,3 @@ TrajectoryPlannerROS:
   min_vel_y: 0.0
   acc_lim_y: 0.0
   vy_samples: 1
-  
