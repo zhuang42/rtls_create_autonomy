@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:macro name="sim_create_base">
     <gazebo>
+      <!-- Diff-drive controller -->
       <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
         <alwaysOn>true</alwaysOn>
         <rosDebugLevel>na</rosDebugLevel>
@@ -24,6 +25,7 @@
         <publishTf>1</publishTf>
       </plugin>
 
+      <!-- Ground truth -->
       <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
         <alwaysOn>true</alwaysOn>
         <updateRate>100.0</updateRate>
@@ -35,6 +37,29 @@
         <rpyOffsets>0 0 0</rpyOffsets>
       </plugin>
     </gazebo>
+
+    <!-- Bumpers -->
+    <gazebo reference="base_link">
+      <gravity>true</gravity>
+      <self_collide>false</self_collide>
+      <sensor name='bumper_contact_sensor' type='contact'>
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+        <contact>
+          <collision>base_link_collision</collision>
+          <topic>bumpers</topic>
+        </contact>
+        <!-- Plugin -->
+        <!-- <plugin name="gazebo_ros_bumper_controller" filename="libgazebo_ros_bumper.so">
+          <frameName>base_link</frameName>
+          <bumperTopicName>bumper</bumperTopicName>
+        </plugin> -->
+        
+        <!-- <plugin name="gazebo_ros_bumper_controller" filename="libcreate_bumper_plugin.so"/> -->
+      </sensor>
+    </gazebo>
+
+    <!-- Wheels -->
 
     <gazebo reference="left_wheel_link">
       <mu1>1.0</mu1>
@@ -54,23 +79,6 @@
       <maxVel>1.0</maxVel>
     </gazebo>
 
-    <gazebo reference="rear_wheel_link">
-      <mu1>0.0</mu1>
-      <mu2>0.0</mu2>
-      <kp>1000000.0</kp>
-      <kd>100.0</kd>
-      <minDepth>0.001</minDepth>
-      <maxVel>1.0</maxVel>
-    </gazebo>
-
-    <gazebo reference="front_wheel_link">
-      <mu1>0.0</mu1>
-      <mu2>0.0</mu2>
-      <kp>1000000.0</kp>
-      <kd>100.0</kd>
-      <minDepth>0.001</minDepth>
-      <maxVel>1.0</maxVel>
-    </gazebo>
   </xacro:macro>
 
 </robot>
