@@ -18,7 +18,7 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_library(ca_bumper2pc_nodelet src/ca_bumper2pc.cpp)
-add_dependencies(ca_bumper2pc_nodelet sensor_msgs_gencpp ca_msgs_gencpp)
+add_dependencies(ca_bumper2pc_nodelet ${catkin_EXPORTED_TARGETS})
 target_link_libraries(ca_bumper2pc_nodelet ${catkin_LIBRARIES})
 
 install(TARGETS ca_bumper2pc_nodelet
