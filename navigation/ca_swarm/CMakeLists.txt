@@ -10,26 +10,32 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   actionlib
   amcl
+  ca_move_base
+  geometry_msgs
   move_base
   move_base_msgs
   roscpp
+  roslint
+  rospy
   tf
+  tf2_ros
 )
 
 ###################################
 ## catkin specific configuration ##
 ###################################
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS
+    geometry_msgs
+    move_base_msgs
+    rospy
+)
 
 ###########
 ## Build ##
 ###########
 
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-  geometry_msgs
-  rospy
-)
+include_directories(${catkin_INCLUDE_DIRS})
 
 #############
 ## Install ##
@@ -37,7 +43,10 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-install(PROGRAMS
-  scripts/swarm_controller_node
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+install(DIRECTORY scripts
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+        USE_SOURCE_PERMISSIONS
+        PATTERN ".svn" EXCLUDE
 )
+
+roslint_python()

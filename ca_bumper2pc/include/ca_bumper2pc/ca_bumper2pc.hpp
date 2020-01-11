@@ -68,9 +68,9 @@ class Bumper2PcNodelet : public nodelet::Nodelet
 {
 public:
   Bumper2PcNodelet()
-    : P_INF_X(+100*sin(0.34906585)),
-      P_INF_Y(+100*cos(0.34906585)),
-      N_INF_Y(-100*cos(0.34906585)),
+    : P_INF_X(+100 * sin(0.34906585)),
+      P_INF_Y(+100 * cos(0.34906585)),
+      N_INF_Y(-100 * cos(0.34906585)),
       ZERO(0), prev_bumper(0), prev_cliff(0) { }
   ~Bumper2PcNodelet() { }
 
@@ -94,7 +94,7 @@ private:
   ros::Publisher  pointcloud_pub_;
   ros::Subscriber cliff_event_subscriber_ ;
   ros::Subscriber bumper_event_subscriber_;
-   
+
   sensor_msgs::PointCloud2 pointcloud_;
 
   /**
@@ -105,6 +105,6 @@ private:
   void cliffSensorCB(const ca_msgs::Cliff::ConstPtr& msg_cliff);
 };
 
-} // namespace create_bumper2pc
+}   // namespace create_bumper2pc
 
 #endif // _CA_BUMPER2PC_HPP_

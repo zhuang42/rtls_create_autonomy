@@ -2,7 +2,7 @@
 <package format="2">
   <name>ca_move_base</name>
   <version>0.0.0</version>
-  <description>The ca_move_base package</description>
+  <description>Has navigations utilities</description>
 
   <maintainer email="emiliano.borghi@gmail.com">Emiliano Borghi</maintainer>
 

@@ -1,26 +1,32 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(ca_bumper2pc)
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
+  ca_msgs
   nodelet
   pluginlib
-  ca_msgs
+  roscpp
+  roslint
   sensor_msgs
 )
 
 catkin_package(
    INCLUDE_DIRS include
-   LIBRARIES ca_bumper2pc_nodelet
-   CATKIN_DEPENDS roscpp nodelet pluginlib sensor_msgs ca_msgs
+   LIBRARIES ${PROJECT_NAME}_nodelet
+   CATKIN_DEPENDS
+        ca_msgs
+        nodelet
+        pluginlib
+        roscpp
+        sensor_msgs
 )
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_library(ca_bumper2pc_nodelet src/ca_bumper2pc.cpp)
-add_dependencies(ca_bumper2pc_nodelet ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ca_bumper2pc_nodelet ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME}_nodelet src/${PROJECT_NAME}.cpp)
+add_dependencies(${PROJECT_NAME}_nodelet ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_nodelet ${catkin_LIBRARIES})
 
-install(TARGETS ca_bumper2pc_nodelet
+install(TARGETS ${PROJECT_NAME}_nodelet
         DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
 install(DIRECTORY include/${PROJECT_NAME}/
@@ -32,3 +38,6 @@ install(DIRECTORY plugins
 install(DIRECTORY launch
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
+
+set(ROSLINT_CPP_OPTS "--filter=-build/c++11")
+roslint_cpp()

@@ -3,15 +3,15 @@ project(ca_driver)
 
 add_compile_options(-std=c++11)
 
-find_package(libcreate REQUIRED)
-
 find_package(catkin REQUIRED COMPONENTS
   ca_msgs
   diagnostic_msgs
   diagnostic_updater
   geometry_msgs
+  libcreate
   nav_msgs
   roscpp
+  roslint
   sensor_msgs
   std_msgs
   tf
@@ -24,17 +24,16 @@ catkin_package(
     diagnostic_msgs
     diagnostic_updater
     geometry_msgs
+    libcreate
     nav_msgs
     roscpp
     sensor_msgs
     std_msgs
     tf
-  DEPENDS libcreate
 )
 
 include_directories(
   include
-  ${libcreate_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -58,6 +57,9 @@ install(DIRECTORY include
   FILES_MATCHING PATTERN "*.h"
 )
 
-install(DIRECTORY launch config
+install(DIRECTORY config launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
+
+set(ROSLINT_CPP_OPTS "--filter=-build/c++11, -runtime/references")
+roslint_cpp()

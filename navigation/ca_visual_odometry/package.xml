@@ -2,7 +2,7 @@
 <package format="2">
   <name>ca_visual_odometry</name>
   <version>0.0.0</version>
-  <description>The ca_visual_odometry package</description>
+  <description>ca_visual_odometry performs visual odometry localization</description>
 
   <maintainer email="emiliano.borghi@gmail.com">Emiliano Borghi</maintainer>
 
@@ -10,6 +10,8 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <build_depend>camera_calibration</build_depend>
+  
   <exec_depend>camera_calibration</exec_depend>
   <exec_depend>gscam</exec_depend>
   <exec_depend>image_proc</exec_depend>

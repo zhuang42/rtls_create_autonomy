@@ -2,7 +2,7 @@
 <package format="2">
   <name>ca_localization</name>
   <version>0.0.0</version>
-  <description>The ca_localization package</description>
+  <description>Contains localization tools</description>
 
   <maintainer email="emiliano.borghi@gmail.com">Emiliano Borghi</maintainer>
 

@@ -2,7 +2,7 @@
 <package format="2">
   <name>ca_bringup</name>
   <version>0.0.0</version>
-  <description>The ca_bringup package</description>
+  <description>ca_bringup spawns the nodes that the real robot uses</description>
 
   <maintainer email="emiliano.borghi@gmail.com">Emiliano Borghi</maintainer>
 

@@ -13,6 +13,7 @@ import math
 import rospy
 from geometry_msgs.msg import Twist
 
+
 class Velocity(object):
 
     def __init__(self, min_velocity, max_velocity, num_steps):
@@ -38,6 +39,7 @@ class Velocity(object):
         max_value = self._min + self._step_incr * (step - 1)
         return value * max_value
 
+
 class TextWindow():
 
     _screen = None
@@ -60,7 +62,7 @@ class TextWindow():
 
     def write_line(self, lineno, message):
         if lineno < 0 or lineno >= self._num_lines:
-            raise ValueError, 'lineno out of bounds'
+            raise ValueError('lineno out of bounds')
         height, width = self._screen.getmaxyx()
         y = (height / self._num_lines) * lineno
         x = 10
@@ -74,6 +76,7 @@ class TextWindow():
 
     def beep(self):
         curses.flash()
+
 
 class KeyTeleop():
 
@@ -127,10 +130,10 @@ class KeyTeleop():
 
     def _key_pressed(self, keycode):
         movement_bindings = {
-            curses.KEY_UP:    ( 1,  0),
-            curses.KEY_DOWN:  (-1,  0),
-            curses.KEY_LEFT:  ( 0,  1),
-            curses.KEY_RIGHT: ( 0, -1),
+            curses.KEY_UP: (1, 0),
+            curses.KEY_DOWN: (-1, 0),
+            curses.KEY_LEFT: (0, 1),
+            curses.KEY_RIGHT: (0, -1),
         }
         speed_bindings = {
             ord(' '): (0, 0),
@@ -190,10 +193,10 @@ class SimpleKeyTeleop():
         self._linear = 0
 
     movement_bindings = {
-        curses.KEY_UP:    ( 1,  0),
-        curses.KEY_DOWN:  (-1,  0),
-        curses.KEY_LEFT:  ( 0,  1),
-        curses.KEY_RIGHT: ( 0, -1),
+        curses.KEY_UP: (1, 0),
+        curses.KEY_DOWN: (-1, 0),
+        curses.KEY_LEFT: (0, 1),
+        curses.KEY_RIGHT: (0, -1),
     }
 
     def run(self):

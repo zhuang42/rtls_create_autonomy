@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Boost REQUIRED system thread)
 
 catkin_package(
-  LIBRARIES ca_nodelet ca_driver
+  LIBRARIES ${PROJECT_NAME}let ca_driver
   CATKIN_DEPENDS 
     ca_description
     ca_msgs
@@ -41,3 +41,9 @@ install(DIRECTORY launch plugins
 
 install(DIRECTORY scripts
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+install(DIRECTORY scripts
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+        USE_SOURCE_PERMISSIONS
+        PATTERN ".svn" EXCLUDE
+)

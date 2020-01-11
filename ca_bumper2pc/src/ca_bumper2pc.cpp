@@ -3,7 +3,7 @@
  *
  * @brief Bumper to pointcloud nodelet class implementation.
  *
- * 
+ * Copyright 2020
  *
  **/
 
@@ -15,6 +15,8 @@
 
 #include "ca_bumper2pc/ca_bumper2pc.hpp"
 
+#include <string>
+
 namespace create_bumper2pc
 {
 
@@ -23,13 +25,14 @@ void Bumper2PcNodelet::bumperSensorCB(const ca_msgs::Bumper::ConstPtr& msg_bump)
   if (pointcloud_pub_.getNumSubscribers() == 0)
     return;
 
-  // We publish just one "no events" pc (with all three points far away) and stop spamming when bumper/cliff conditions disappear
-  if (! (msg_bump->is_left_pressed || msg_bump->is_right_pressed) && ! prev_bumper)
+  // We publish just one "no events" pc (with all three points far away)
+  // and stop spamming when bumper/cliff conditions disappear
+  if (!(msg_bump->is_left_pressed || msg_bump->is_right_pressed) && !prev_bumper)
     return;
 
   prev_bumper = msg_bump->is_left_pressed || msg_bump->is_right_pressed;
 
-  // For any of {left/center/right} with no bumper/cliff event, we publish a faraway point that won't get used 
+  // For any of {left/center/right} with no bumper/cliff event, we publish a faraway point that won't get used
   if (msg_bump->is_left_pressed && !(msg_bump->is_right_pressed))
   {
     memcpy(&pointcloud_.data[0 * pointcloud_.point_step + pointcloud_.fields[0].offset], &p_side_x_, sizeof(float));
@@ -50,7 +53,7 @@ void Bumper2PcNodelet::bumperSensorCB(const ca_msgs::Bumper::ConstPtr& msg_bump)
     memcpy(&pointcloud_.data[1 * pointcloud_.point_step + pointcloud_.fields[0].offset], &P_INF_X, sizeof(float));
   }
 
-  if (msg_bump->is_right_pressed && !(msg_bump->is_left_pressed))     
+  if (msg_bump->is_right_pressed && !(msg_bump->is_left_pressed))
   {
     memcpy(&pointcloud_.data[2 * pointcloud_.point_step + pointcloud_.fields[0].offset], &p_side_x_, sizeof(float));
     memcpy(&pointcloud_.data[2 * pointcloud_.point_step + pointcloud_.fields[1].offset], &n_side_y_, sizeof(float));
@@ -71,15 +74,22 @@ void Bumper2PcNodelet::cliffSensorCB(const ca_msgs::Cliff::ConstPtr& msg_cliff)
   if (pointcloud_pub_.getNumSubscribers() == 0)
     return;
 
-  // We publish just one "no events" pc (with all three points far away) and stop spamming when bumper/cliff conditions disappear
-  if ( !(msg_cliff->is_cliff_left || msg_cliff->is_cliff_front_left || msg_cliff->is_cliff_front_right || msg_cliff->is_cliff_right)
-	 && !prev_cliff)
+  // We publish just one "no events" pc (with all three points far away)
+  // and stop spamming when bumper/cliff conditions disappear
+  if (!(msg_cliff->is_cliff_left ||
+        msg_cliff->is_cliff_front_left ||
+        msg_cliff->is_cliff_front_right ||
+        msg_cliff->is_cliff_right)
+      && !prev_cliff)
     return;
 
-  prev_cliff  = msg_cliff->is_cliff_left || msg_cliff->is_cliff_front_left || msg_cliff->is_cliff_front_right || msg_cliff->is_cliff_right;
+  prev_cliff  = msg_cliff->is_cliff_left ||
+                msg_cliff->is_cliff_front_left ||
+                msg_cliff->is_cliff_front_right ||
+                msg_cliff->is_cliff_right;
 
-  
-  // For any of {left/center/right} with no bumper/cliff event, we publish a faraway point that won't get used 
+
+  // For any of {left/center/right} with no bumper/cliff event, we publish a faraway point that won't get used
   if (msg_cliff->is_cliff_left)
   {
     memcpy(&pointcloud_.data[0 * pointcloud_.point_step + pointcloud_.fields[0].offset], &p_side_x_, sizeof(float));
@@ -126,15 +136,17 @@ void Bumper2PcNodelet::onInit()
   // them will probably fail.
   std::string base_link_frame;
   double r, h, angle;
-  nh.param("pointcloud_radius", r, 0.25); pc_radius_ = r;
-  nh.param("pointcloud_height", h, 0.04); pc_height_ = h;
-  nh.param("side_point_angle", angle, 0.34906585); 
+  nh.param("pointcloud_radius", r, 0.25);
+  pc_radius_ = r;
+  nh.param("pointcloud_height", h, 0.04);
+  pc_height_ = h;
+  nh.param("side_point_angle", angle, 0.34906585);
   nh.param<std::string>("base_link_frame", base_link_frame, "/base_link");
 
   // Lateral points x/y coordinates; we need to store float values to memcopy later
-  p_side_x_ = + pc_radius_*sin(angle); // angle degrees from vertical
-  p_side_y_ = + pc_radius_*cos(angle); // angle degrees from vertical
-  n_side_y_ = - pc_radius_*cos(angle); // angle degrees from vertical
+  p_side_x_ = + pc_radius_ * sin(angle);  // angle degrees from vertical
+  p_side_y_ = + pc_radius_ * cos(angle);  // angle degrees from vertical
+  n_side_y_ = - pc_radius_ * cos(angle);  // angle degrees from vertical
 
   // Prepare constant parts of the pointcloud message to be  published
   pointcloud_.header.frame_id = base_link_frame;
@@ -180,7 +192,7 @@ void Bumper2PcNodelet::onInit()
   ROS_INFO("Bumper/cliff pointcloud configured at distance %f and height %f from base frame", pc_radius_, pc_height_);
 }
 
-} // namespace create_bumper2pc
+}  // namespace create_bumper2pc
 
 
 PLUGINLIB_EXPORT_CLASS(create_bumper2pc::Bumper2PcNodelet, nodelet::Nodelet);

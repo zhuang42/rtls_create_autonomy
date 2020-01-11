@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CA_GAZEBO_CREATE_BUMPER_PLUGIN_H
+#define CA_GAZEBO_CREATE_BUMPER_PLUGIN_H
 
 /*
  *  Gazebo - Outdoor Multi-Robot Simulator
@@ -26,9 +27,8 @@
  * Date: 24 Sept 2008
  */
 #include <ros/ros.h>
+#include <tf/tf.h>
 #include <tf/transform_datatypes.h>
-
-#include <string>
 
 #include <gazebo/gazebo.hh>
 #include <gazebo/sensors/sensors.hh>
@@ -41,63 +41,69 @@
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Quaternion.h>
 
-#include <tf/tf.h>
+#include <string>
 
 namespace gazebo
 {
-  /// \brief A Bumper controller
-  class CreateBumperPlugin : public SensorPlugin
+/// \brief A Bumper controller
+class CreateBumperPlugin : public SensorPlugin
+{
+  /// Constructor
+public:
+  CreateBumperPlugin();
+
+  /// Destructor
+public:
+  virtual ~CreateBumperPlugin();
+
+  /// \brief Load the plugin
+  /// \param take in SDF root element
+public:
+  void Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf);
+
+  /// Update the controller
+protected:
+  void OnUpdate();
+
+private:
+  inline float normalizeAngle(float angle)
   {
-    /// Constructor
-    public: CreateBumperPlugin();
-
-    /// Destructor
-    public: virtual ~CreateBumperPlugin();
-
-    /// \brief Load the plugin
-    /// \param take in SDF root element
-    public: void Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf);
-
-    /// Update the controller
-    protected: void OnUpdate();
-
-  private:
-
-      inline float normalizeAngle(float angle) {
-        angle = std::fmod(angle + M_PI,2*M_PI);
-        if (angle < 0)
-            angle += 2*M_PI;
-        return angle - M_PI;
-      };
-
-      /// \brief pointer to ros node
-      std::shared_ptr<ros::NodeHandle> rosnode_;
-      ros::Publisher contact_pub_;
-      ros::Subscriber gts_sub_;
-      ca_msgs::Bumper bumper_event_;
-      void PublishBumperMsg();
-
-      void GtsCb(const nav_msgs::Odometry::ConstPtr& msg);
-      double robot_heading_;
-
-      bool bumper_left_was_pressed_;
-      bool bumper_center_was_pressed_;
-      bool bumper_right_was_pressed_;
-      bool bumper_left_is_pressed_;
-      bool bumper_center_is_pressed_;
-      bool bumper_right_is_pressed_;
-      
-      /// \brief set topic name of broadcast
-      std::string bumper_topic_name_;
-      std::string frame_name_;
-      
-      sensors::ContactSensorPtr bumper_;
-      
-      /// \brief for setting ROS namespace
-      std::string robot_namespace_;
-      
-      // Pointer to the update event connection
-      event::ConnectionPtr update_connection_;
+    angle = std::fmod(angle + M_PI, 2 * M_PI);
+    if (angle < 0)
+      angle += 2 * M_PI;
+    return angle - M_PI;
   };
 
-}
+  /// \brief pointer to ros node
+  std::shared_ptr<ros::NodeHandle> rosnode_;
+  ros::Publisher contact_pub_;
+  ros::Subscriber gts_sub_;
+  ca_msgs::Bumper bumper_event_;
+  void PublishBumperMsg();
+
+  void GtsCb(const nav_msgs::Odometry::ConstPtr& msg);
+  double robot_heading_;
+
+  bool bumper_left_was_pressed_;
+  bool bumper_center_was_pressed_;
+  bool bumper_right_was_pressed_;
+  bool bumper_left_is_pressed_;
+  bool bumper_center_is_pressed_;
+  bool bumper_right_is_pressed_;
+
+  /// \brief set topic name of broadcast
+  std::string bumper_topic_name_;
+  std::string frame_name_;
+
+  sensors::ContactSensorPtr bumper_;
+
+  /// \brief for setting ROS namespace
+  std::string robot_namespace_;
+
+  // Pointer to the update event connection
+  event::ConnectionPtr update_connection_;
+};
+
+}  // namespace gazebo
+
+#endif  // CA_GAZEBO_CREATE_BUMPER_PLUGIN_H

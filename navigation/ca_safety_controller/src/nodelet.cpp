@@ -43,8 +43,10 @@
 #include <nodelet/nodelet.h>
 #include <pluginlib/class_list_macros.h>
 #include <ecl/threads/thread.hpp>
+
 #include "ca_safety_controller/safety_controller.hpp"
 
+#include <string>
 
 namespace ca
 {
@@ -52,7 +54,7 @@ namespace ca
 class SafetyControllerNodelet : public nodelet::Nodelet
 {
 public:
-  SafetyControllerNodelet() : shutdown_requested_(false) { };
+  SafetyControllerNodelet() : shutdown_requested_(false) { }
   ~SafetyControllerNodelet()
   {
     NODELET_DEBUG_STREAM("Waiting for update thread to finish.");
@@ -83,8 +85,8 @@ private:
   void update()
   {
     ros::Rate spin_rate(10);
-    controller_->enable(); // enable the controller when loading the nodelet
-    while (! shutdown_requested_ && ros::ok())
+    controller_->enable();  // enable the controller when loading the nodelet
+    while ( !shutdown_requested_ && ros::ok() )
     {
       controller_->spin();
       spin_rate.sleep();
@@ -96,7 +98,7 @@ private:
   bool shutdown_requested_;
 };
 
-} // namespace ca
+}  // namespace ca
 
 PLUGINLIB_EXPORT_CLASS(ca::SafetyControllerNodelet,
-                        nodelet::Nodelet);
+                       nodelet::Nodelet);

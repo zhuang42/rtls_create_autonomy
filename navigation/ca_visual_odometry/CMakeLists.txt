@@ -37,3 +37,9 @@ include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
 )
+
+install(DIRECTORY scripts
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+        USE_SOURCE_PERMISSIONS
+        PATTERN ".svn" EXCLUDE
+)

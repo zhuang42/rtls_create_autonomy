@@ -28,7 +28,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include <tf/transform_datatypes.h>
 #include <create_driver/create_driver.h>
+
 #include <unistd.h>
+#include <string>
 
 namespace create
 {
@@ -49,13 +51,20 @@ CreateDriver::CreateDriver(ros::NodeHandle& nh, ros::NodeHandle& ph)
   priv_nh_.param<double>("latch_cmd_duration", latch_duration_, 0.2);
   priv_nh_.param<bool>("publish_tf", publish_tf_, true);
 
-  if (robot_model_name == "ROOMBA_400") {
+  if (robot_model_name == "ROOMBA_400")
+  {
     model_ = create::RobotModel::ROOMBA_400;
-  } else if (robot_model_name == "CREATE_1") {
+  }
+  else if (robot_model_name == "CREATE_1")
+  {
     model_ = create::RobotModel::CREATE_1;
-  } else if (robot_model_name == "CREATE_2") {
+  }
+  else if (robot_model_name == "CREATE_2")
+  {
     model_ = create::RobotModel::CREATE_2;
-  } else {
+  }
+  else
+  {
     ROS_FATAL_STREAM("[CREATE] Robot model \"" + robot_model_name + "\" is not known.");
     ros::shutdown();
     return;
@@ -142,7 +151,7 @@ CreateDriver::CreateDriver(ros::NodeHandle& nh, ros::NodeHandle& ph)
   wheeldrop_pub_ = nh.advertise<ca_msgs::Wheeldrop>("wheeldrop", 30);
   wheel_joint_pub_ = nh.advertise<sensor_msgs::JointState>("joint_states", 10);
   wall_pub_ = nh.advertise<std_msgs::Bool>("wall", 30);
-  //overcurrent_pub_ = nh.advertise<ca_msgs::Overcurrent>("overcurrent", 30);
+  // overcurrent_pub_ = nh.advertise<ca_msgs::Overcurrent>("overcurrent", 30);
 
   // Setup diagnostics
   diagnostics_.add("Battery Status", this, &CreateDriver::updateBatteryDiagnostics);
@@ -243,20 +252,22 @@ void CreateDriver::setASCIICallback(const std_msgs::UInt8MultiArrayConstPtr& msg
 
 void CreateDriver::playSongCallback(const std_msgs::UInt8ConstPtr& msg)
 {
-	if (msg->data == 4){
-		robot_->defineSong(3, SONG_4_LENGTH, SONG_4_NOTES, SONG_4_DURATIONS);
-		robot_->playSong(3);
-	}
+  if (msg->data == 4)
+  {
+    robot_->defineSong(3, SONG_4_LENGTH, SONG_4_NOTES, SONG_4_DURATIONS);
+    robot_->playSong(3);
+  }
 
-	else if (msg->data == 3){
-		robot_->defineSong(3, SONG_3_LENGTH, SONG_3_NOTES, SONG_3_DURATIONS);
-		robot_->playSong(3);
-	}
+  else if (msg->data == 3)
+  {
+    robot_->defineSong(3, SONG_3_LENGTH, SONG_3_NOTES, SONG_3_DURATIONS);
+    robot_->playSong(3);
+  }
 
-	else{
-		robot_->playSong(msg->data);
-	}
-
+  else
+  {
+    robot_->playSong(msg->data);
+  }
 }
 
 void CreateDriver::dockCallback(const std_msgs::EmptyConstPtr& msg)
@@ -294,7 +305,7 @@ bool CreateDriver::update()
   publishCliffInfo();
   publishWheeldrop();
   publishIsWall();
-  //publishOvercurrent();
+  // publishOvercurrent();
 
   // If last velocity command was sent longer than latch duration, stop robot
   if (ros::Time::now() - last_cmd_vel_time_ >= ros::Duration(latch_duration_))
@@ -305,7 +316,7 @@ bool CreateDriver::update()
   return true;
 }
 
-void CreateDriver::updateBatteryDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat)
+void CreateDriver::updateBatteryDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   const float charge = robot_->getBatteryCharge();
   const float capacity = robot_->getBatteryCapacity();
@@ -338,31 +349,34 @@ void CreateDriver::updateBatteryDiagnostics(diagnostic_updater::DiagnosticStatus
 
   switch (charging_state)
   {
-    case create::CHARGE_NONE:
-      stat.add("Charging state", "Not charging");
-      break;
-    case create::CHARGE_RECONDITION:
-      stat.add("Charging state", "Reconditioning");
-      break;
-    case create::CHARGE_FULL:
-      stat.add("Charging state", "Full charging");
-      break;
-    case create::CHARGE_TRICKLE:
-      stat.add("Charging state", "Trickle charging");
-      break;
-    case create::CHARGE_WAITING:
-      stat.add("Charging state", "Waiting");
-      break;
-    case create::CHARGE_FAULT:
-      stat.add("Charging state", "Fault");
-      break;
+  case create::CHARGE_NONE:
+    stat.add("Charging state", "Not charging");
+    break;
+  case create::CHARGE_RECONDITION:
+    stat.add("Charging state", "Reconditioning");
+    break;
+  case create::CHARGE_FULL:
+    stat.add("Charging state", "Full charging");
+    break;
+  case create::CHARGE_TRICKLE:
+    stat.add("Charging state", "Trickle charging");
+    break;
+  case create::CHARGE_WAITING:
+    stat.add("Charging state", "Waiting");
+    break;
+  case create::CHARGE_FAULT:
+    stat.add("Charging state", "Fault");
+    break;
   }
 }
 
-void CreateDriver::updateSafetyDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat)
+void CreateDriver::updateSafetyDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   const bool is_wheeldrop = robot_->isLeftWheel() || robot_->isRightWheel();
-  const bool is_cliff = robot_->isCliffLeft() || robot_->isCliffFrontLeft() || robot_->isCliffFrontRight() || robot_->isCliffRight();
+  const bool is_cliff = robot_->isCliffLeft() ||
+                        robot_->isCliffFrontLeft() ||
+                        robot_->isCliffFrontRight() ||
+                        robot_->isCliffRight();
   if (is_wheeldrop)
   {
     stat.summary(diagnostic_msgs::DiagnosticStatus::WARN, "Wheeldrop detected");
@@ -380,7 +394,7 @@ void CreateDriver::updateSafetyDiagnostics(diagnostic_updater::DiagnosticStatusW
   stat.add("Cliff", is_cliff);
 }
 
-void CreateDriver::updateSerialDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat)
+void CreateDriver::updateSerialDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   const bool is_connected = robot_->connected();
   const uint64_t corrupt_packets = robot_->getNumCorruptPackets();
@@ -404,30 +418,30 @@ void CreateDriver::updateSerialDiagnostics(diagnostic_updater::DiagnosticStatusW
   stat.add("Total packets", total_packets);
 }
 
-void CreateDriver::updateModeDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat)
+void CreateDriver::updateModeDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   const create::CreateMode mode = robot_->getMode();
   switch (mode)
   {
-    case create::MODE_UNAVAILABLE:
-      stat.summary(diagnostic_msgs::DiagnosticStatus::ERROR, "Unknown mode of operation");
-      break;
-    case create::MODE_OFF:
-      stat.summary(diagnostic_msgs::DiagnosticStatus::WARN, "Mode is set to OFF");
-      break;
-    case create::MODE_PASSIVE:
-      stat.summary(diagnostic_msgs::DiagnosticStatus::OK, "Mode is set to PASSIVE");
-      break;
-    case create::MODE_SAFE:
-      stat.summary(diagnostic_msgs::DiagnosticStatus::OK, "Mode is set to SAFE");
-      break;
-    case create::MODE_FULL:
-      stat.summary(diagnostic_msgs::DiagnosticStatus::OK, "Mode is set to FULL");
-      break;
+  case create::MODE_UNAVAILABLE:
+    stat.summary(diagnostic_msgs::DiagnosticStatus::ERROR, "Unknown mode of operation");
+    break;
+  case create::MODE_OFF:
+    stat.summary(diagnostic_msgs::DiagnosticStatus::WARN, "Mode is set to OFF");
+    break;
+  case create::MODE_PASSIVE:
+    stat.summary(diagnostic_msgs::DiagnosticStatus::OK, "Mode is set to PASSIVE");
+    break;
+  case create::MODE_SAFE:
+    stat.summary(diagnostic_msgs::DiagnosticStatus::OK, "Mode is set to SAFE");
+    break;
+  case create::MODE_FULL:
+    stat.summary(diagnostic_msgs::DiagnosticStatus::OK, "Mode is set to FULL");
+    break;
   }
 }
 
-void CreateDriver::updateDriverDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat)
+void CreateDriver::updateDriverDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (is_running_slowly_)
   {
@@ -490,34 +504,34 @@ void CreateDriver::publishOdom()
 
 void CreateDriver::publishAngle()
 {
-    const float orientation_stddev = 5.0*M_PI/180.0; // 5 degrees
-    /*
-     * According to Roomba Open Interface specs, the angle has to be
-     * divided by 0.324056 to get the angle in degrees.
-     * So, to get it in radians, the number has to be divided by 180 too.
-     */
-    orientation_ += (robot_->getAngle() * M_PI / 58.33008);
-    const float yaw = CreateDriver::normalizeAngle(orientation_);
-    const float yaw_2 = yaw / 2.;
-    angle_msg_.pose.pose.orientation.x = cos(yaw_2);
-    angle_msg_.pose.pose.orientation.w = sin(yaw_2);
-    angle_msg_.header.seq += 1;
-    angle_msg_.header.stamp = ros::Time::now();
-    angle_msg_.pose.covariance[35] = orientation_stddev * orientation_stddev;
-    angle_pub_.publish(angle_msg_);
+  const float orientation_stddev = 5.0 * M_PI / 180.0;  // 5 degrees
+  /*
+   * According to Roomba Open Interface specs, the angle has to be
+   * divided by 0.324056 to get the angle in degrees.
+   * So, to get it in radians, the number has to be divided by 180 too.
+   */
+  orientation_ += (robot_->getAngle() * M_PI / 58.33008);
+  const float yaw = CreateDriver::normalizeAngle(orientation_);
+  const float yaw_2 = yaw / 2.;
+  angle_msg_.pose.pose.orientation.x = cos(yaw_2);
+  angle_msg_.pose.pose.orientation.w = sin(yaw_2);
+  angle_msg_.header.seq += 1;
+  angle_msg_.header.stamp = ros::Time::now();
+  angle_msg_.pose.covariance[35] = orientation_stddev * orientation_stddev;
+  angle_pub_.publish(angle_msg_);
 }
 
 void CreateDriver::publishJointState()
 {
-    // Publish joint states
-    float wheelRadius = model_.getWheelDiameter() / 2.0;
+  // Publish joint states
+  float wheelRadius = model_.getWheelDiameter() / 2.0;
 
-    joint_state_msg_.header.stamp = ros::Time::now();
-    joint_state_msg_.position[0] = robot_->getLeftWheelDistance() / wheelRadius;
-    joint_state_msg_.position[1] = robot_->getRightWheelDistance() / wheelRadius;
-    joint_state_msg_.velocity[0] = robot_->getRequestedLeftWheelVel() / wheelRadius;
-    joint_state_msg_.velocity[1] = robot_->getRequestedRightWheelVel() / wheelRadius;
-    wheel_joint_pub_.publish(joint_state_msg_);
+  joint_state_msg_.header.stamp = ros::Time::now();
+  joint_state_msg_.position[0] = robot_->getLeftWheelDistance() / wheelRadius;
+  joint_state_msg_.position[1] = robot_->getRightWheelDistance() / wheelRadius;
+  joint_state_msg_.velocity[0] = robot_->getRequestedLeftWheelVel() / wheelRadius;
+  joint_state_msg_.velocity[1] = robot_->getRequestedRightWheelVel() / wheelRadius;
+  wheel_joint_pub_.publish(joint_state_msg_);
 }
 
 void CreateDriver::publishBatteryInfo()
@@ -539,28 +553,28 @@ void CreateDriver::publishBatteryInfo()
   charging_state_msg_.header.stamp = ros::Time::now();
   switch (charging_state)
   {
-    case create::CHARGE_NONE:
-      charging_state_msg_.state = charging_state_msg_.CHARGE_NONE;
-      break;
-    case create::CHARGE_RECONDITION:
-      charging_state_msg_.state = charging_state_msg_.CHARGE_RECONDITION;
-      break;
+  case create::CHARGE_NONE:
+    charging_state_msg_.state = charging_state_msg_.CHARGE_NONE;
+    break;
+  case create::CHARGE_RECONDITION:
+    charging_state_msg_.state = charging_state_msg_.CHARGE_RECONDITION;
+    break;
 
-    case create::CHARGE_FULL:
-      charging_state_msg_.state = charging_state_msg_.CHARGE_FULL;
-      break;
+  case create::CHARGE_FULL:
+    charging_state_msg_.state = charging_state_msg_.CHARGE_FULL;
+    break;
 
-    case create::CHARGE_TRICKLE:
-      charging_state_msg_.state = charging_state_msg_.CHARGE_TRICKLE;
-      break;
+  case create::CHARGE_TRICKLE:
+    charging_state_msg_.state = charging_state_msg_.CHARGE_TRICKLE;
+    break;
 
-    case create::CHARGE_WAITING:
-      charging_state_msg_.state = charging_state_msg_.CHARGE_WAITING;
-      break;
+  case create::CHARGE_WAITING:
+    charging_state_msg_.state = charging_state_msg_.CHARGE_WAITING;
+    break;
 
-    case create::CHARGE_FAULT:
-      charging_state_msg_.state = charging_state_msg_.CHARGE_FAULT;
-      break;
+  case create::CHARGE_FAULT:
+    charging_state_msg_.state = charging_state_msg_.CHARGE_FAULT;
+    break;
   }
   charging_state_pub_.publish(charging_state_msg_);
 }
@@ -598,7 +612,7 @@ void CreateDriver::publishOmniChar()
   uint8_t ir_char = robot_->getIROmni();
   uint16_msg_.data = ir_char;
   omni_char_pub_.publish(uint16_msg_);
-  // TODO: Publish info based on character, such as dock in sight
+  // TODO(@eborghi10): Publish info based on character, such as dock in sight
 }
 
 void CreateDriver::publishMode()
@@ -607,21 +621,21 @@ void CreateDriver::publishMode()
   mode_msg_.header.stamp = ros::Time::now();
   switch (mode)
   {
-    case create::MODE_OFF:
-      mode_msg_.mode = mode_msg_.MODE_OFF;
-      break;
-    case create::MODE_PASSIVE:
-      mode_msg_.mode = mode_msg_.MODE_PASSIVE;
-      break;
-    case create::MODE_SAFE:
-      mode_msg_.mode = mode_msg_.MODE_SAFE;
-      break;
-    case create::MODE_FULL:
-      mode_msg_.mode = mode_msg_.MODE_FULL;
-      break;
-    default:
-      ROS_ERROR("[CREATE] Unknown mode detected");
-      break;
+  case create::MODE_OFF:
+    mode_msg_.mode = mode_msg_.MODE_OFF;
+    break;
+  case create::MODE_PASSIVE:
+    mode_msg_.mode = mode_msg_.MODE_PASSIVE;
+    break;
+  case create::MODE_SAFE:
+    mode_msg_.mode = mode_msg_.MODE_SAFE;
+    break;
+  case create::MODE_FULL:
+    mode_msg_.mode = mode_msg_.MODE_FULL;
+    break;
+  default:
+    ROS_ERROR("[CREATE] Unknown mode detected");
+    break;
   }
   mode_pub_.publish(mode_msg_);
 }
@@ -675,28 +689,28 @@ void CreateDriver::publishCliffInfo()
 
 void CreateDriver::publishWheeldrop()
 {
-    wheeldrop_msg_.header.stamp = ros::Time::now();
-    wheeldrop_msg_.is_left_dropped = robot_->isLeftWheel();
-    wheeldrop_msg_.is_right_dropped = robot_->isRightWheel();
+  wheeldrop_msg_.header.stamp = ros::Time::now();
+  wheeldrop_msg_.is_left_dropped = robot_->isLeftWheel();
+  wheeldrop_msg_.is_right_dropped = robot_->isRightWheel();
 
-    wheeldrop_pub_.publish(wheeldrop_msg_);
+  wheeldrop_pub_.publish(wheeldrop_msg_);
 }
 
 void CreateDriver::publishIsWall()
 {
-    is_wall_msg_.data = robot_->isWall();
+  is_wall_msg_.data = robot_->isWall();
 
-    wall_pub_.publish(is_wall_msg_);
+  wall_pub_.publish(is_wall_msg_);
 }
 
 void CreateDriver::publishOvercurrent()
 {
-    is_overcurrent_msg_.is_left_wheel_overcurrent = robot_->isLeftWheelOvercurrent();
-    is_overcurrent_msg_.is_right_wheel_overcurrent = robot_->isRightWheelOvercurrent();
-    is_overcurrent_msg_.is_main_brush_overcurrent = robot_->isMainBrushOvercurrent();
-    is_overcurrent_msg_.is_side_brush_overcurrent = robot_->isSideBrushOvercurrent();
+  is_overcurrent_msg_.is_left_wheel_overcurrent = robot_->isLeftWheelOvercurrent();
+  is_overcurrent_msg_.is_right_wheel_overcurrent = robot_->isRightWheelOvercurrent();
+  is_overcurrent_msg_.is_main_brush_overcurrent = robot_->isMainBrushOvercurrent();
+  is_overcurrent_msg_.is_side_brush_overcurrent = robot_->isSideBrushOvercurrent();
 
-    overcurrent_pub_.publish(is_overcurrent_msg_);
+  overcurrent_pub_.publish(is_overcurrent_msg_);
 }
 
 void CreateDriver::spinOnce()
@@ -708,31 +722,29 @@ void CreateDriver::spinOnce()
 
 void CreateDriver::spin()
 {
-
-try{
-  ros::Rate rate(loop_hz_);
-  while (ros::ok())
+  try
   {
-    spinOnce();
-
-    is_running_slowly_ = !rate.sleep();
-    if (is_running_slowly_)
+    ros::Rate rate(loop_hz_);
+    while (ros::ok())
     {
-      ROS_WARN("[CREATE] Loop running slowly.");
+      spinOnce();
+
+      is_running_slowly_ = !rate.sleep();
+      if (is_running_slowly_)
+      {
+        ROS_WARN("[CREATE] Loop running slowly.");
+      }
     }
   }
-}
 
 
   catch (std::runtime_error& ex)
   {
     ROS_FATAL_STREAM("[CREATE] Runtime error: " << ex.what());
   }
-
-
 }
 
-}//create namespace
+}  // namespace create
 
 int main(int argc, char** argv)
 {

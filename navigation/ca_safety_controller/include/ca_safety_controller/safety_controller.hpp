@@ -86,10 +86,10 @@ public:
     bumper_right_pressed_(false),
     cliff_left_detected_(false),
     cliff_center_detected_(false),
-    cliff_right_detected_(false), 
+    cliff_right_detected_(false),
     last_event_time_(ros::Time(0)),
-    msg_(new geometry_msgs::Twist()){};
-  ~SafetyController(){};
+    msg_(new geometry_msgs::Twist()) {};
+  ~SafetyController() {};
 
   /**
    * Set-up necessary publishers/subscribers and variables
@@ -181,7 +181,7 @@ void SafetyController::enableCB(const std_msgs::EmptyConstPtr msg)
   }
   else
   {
-    ROS_INFO_STREAM("Controller was already enabled. [" << name_ <<"]");
+    ROS_INFO_STREAM("Controller was already enabled. [" << name_ << "]");
   }
 };
 
@@ -189,11 +189,11 @@ void SafetyController::disableCB(const std_msgs::EmptyConstPtr msg)
 {
   if (this->disable())
   {
-    ROS_INFO_STREAM("Controller has been disabled. [" << name_ <<"]");
+    ROS_INFO_STREAM("Controller has been disabled. [" << name_ << "]");
   }
   else
   {
-    ROS_INFO_STREAM("Controller was already disabled. [" << name_ <<"]");
+    ROS_INFO_STREAM("Controller was already disabled. [" << name_ << "]");
   }
 };
 
@@ -326,8 +326,9 @@ void SafetyController::spin()
       velocity_command_publisher_.publish(msg_);
     }
     //if we want to extend the safety state and we're within the time, just keep sending msg_
-    else if (time_to_extend_bump_cliff_events_ > ros::Duration(1e-10) && 
-	     ros::Time::now() - last_event_time_ < time_to_extend_bump_cliff_events_) {
+    else if (time_to_extend_bump_cliff_events_ > ros::Duration(1e-10) &&
+             ros::Time::now() - last_event_time_ < time_to_extend_bump_cliff_events_)
+    {
       velocity_command_publisher_.publish(msg_);
     }
   }

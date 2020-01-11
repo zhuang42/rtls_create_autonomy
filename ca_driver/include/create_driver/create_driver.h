@@ -26,10 +26,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef CREATE_AUTONOMY_CREATE_DRIVER_H
-#define CREATE_AUTONOMY_CREATE_DRIVER_H
+#ifndef CREATE_DRIVER_CREATE_DRIVER_H
+#define CREATE_DRIVER_CREATE_DRIVER_H
 
 #include <memory>
+#include <string>
 
 #include <ros/ros.h>
 #include <std_msgs/Empty.h>
@@ -59,33 +60,40 @@ namespace create
 {
 
 static const uint8_t SONG_0_LENGTH = 2;
-static const uint8_t SONG_0_NOTES [] = {64,54};
-static const float SONG_0_DURATIONS [] = {1.0,1.0};
+static const uint8_t SONG_0_NOTES [] = {64, 54};
+static const float SONG_0_DURATIONS [] = {1.0, 1.0};
 
 static const uint8_t SONG_1_LENGTH = 16;
-static const uint8_t SONG_1_NOTES [] = {105,103,100,96,98,107,101,108,105,103,100,96,98,107,103,108};
-static const float SONG_1_DURATIONS [] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
+static const uint8_t SONG_1_NOTES [] =
+  {105, 103, 100, 96, 98, 107, 101, 108, 105, 103, 100, 96, 98, 107, 103, 108};
+static const float SONG_1_DURATIONS [] =
+  {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
 
 static const uint8_t SONG_2_LENGTH = 16;
-static const uint8_t SONG_2_NOTES [] = {84,107,84,107,84,107,84,107,84,107,84,107,84,107,84,107};
-static const float SONG_2_DURATIONS [] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
+static const uint8_t SONG_2_NOTES [] = {84, 107, 84, 107, 84, 107, 84, 107, 84, 107, 84, 107, 84, 107, 84, 107};
+static const float SONG_2_DURATIONS [] =
+  {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
 
 static const uint8_t SONG_3_LENGTH = 11;
-static const uint8_t SONG_3_NOTES [] = {59,59,59,59,62,61,61,59,59,59,59};
-static const float SONG_3_DURATIONS [] = {1.0,0.75,0.25,1.0,0.75,0.25,0.7,0.25,0.7,0.25,1.0};
+static const uint8_t SONG_3_NOTES [] = {59, 59, 59, 59, 62, 61, 61, 59, 59, 59, 59};
+static const float SONG_3_DURATIONS [] = {1.0, 0.75, 0.25, 1.0, 0.75, 0.25, 0.7, 0.25, 0.7, 0.25, 1.0};
 
 static const uint8_t SONG_4_LENGTH = 16;
-static const uint8_t SONG_4_NOTES [] = {79,86,84,83,81,91,86,84,83,81,91,86,84,83,84,81};
-static const float SONG_4_DURATIONS [] = {0.9,0.8,0.2,0.2,0.2,0.8,0.7,0.2,0.2,0.2,0.8,0.7,0.2,0.2,0.2,0.9};
+static const uint8_t SONG_4_NOTES [] = {79, 86, 84, 83, 81, 91, 86, 84, 83, 81, 91, 86, 84, 83, 84, 81};
+static const float SONG_4_DURATIONS [] =
+  {0.9, 0.8, 0.2, 0.2, 0.2, 0.8, 0.7, 0.2, 0.2, 0.2, 0.8, 0.7, 0.2, 0.2, 0.2, 0.9};
 
 // Unused covariances must have a large value
 static const double MAX_DBL = 1e10;
-static const double COVARIANCE[36] = {1e-5, 0.0,  0.0,     0.0,     0.0,     0.0,
+static const double COVARIANCE[36] =
+                                     {
+                                      1e-5, 0.0,  0.0,     0.0,     0.0,     0.0,
                                       1e-5, 0.0,  0.0,     0.0,     0.0,     0.0,
                                       0.0,  0.0,  MAX_DBL, 0.0,     0.0,     0.0,
                                       0.0,  0.0,  0.0,     MAX_DBL, 0.0,     0.0,
                                       0.0,  0.0,  0.0,     0.0,     MAX_DBL, 0.0,
-                                      0.0,  0.0,  0.0,     0.0,     0.0,     1e-3};
+                                      0.0,  0.0,  0.0,     0.0,     0.0,     1e-3
+                                     };
 
 class CreateDriver
 {
@@ -133,11 +141,11 @@ private:
   void mainMotorCallback(const std_msgs::Float32ConstPtr& msg);
 
   bool update();
-  void updateBatteryDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat);
-  void updateSafetyDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat);
-  void updateSerialDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat);
-  void updateModeDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat);
-  void updateDriverDiagnostics(diagnostic_updater::DiagnosticStatusWrapper& stat);
+  void updateBatteryDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat);
+  void updateSafetyDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat);
+  void updateSerialDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat);
+  void updateModeDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat);
+  void updateDriverDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat);
   void publishOdom();
   void publishAngle();
   void publishJointState();
@@ -151,10 +159,11 @@ private:
   void publishIsWall();
   void publishOvercurrent();
 
-  inline float normalizeAngle(float angle) {
-    angle = std::fmod(angle + M_PI,2*M_PI);
+  inline float normalizeAngle(float angle)
+  {
+    angle = std::fmod(angle + M_PI, 2 * M_PI);
     if (angle < 0)
-        angle += 2*M_PI;
+      angle += 2 * M_PI;
     return angle - M_PI;
   };
 
@@ -203,9 +212,8 @@ public:
 
   virtual void spin();
   virtual void spinOnce();
-
 };  // class CreateDriver
 
-} //namespace ccreate
+}  // namespace create
 
-#endif  // CREATE_AUTONOMY_CREATE_DRIVER_H
+#endif  // CREATE_DRIVER_CREATE_DRIVER_H

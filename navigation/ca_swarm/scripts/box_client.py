@@ -9,6 +9,7 @@ from tf.transformations import quaternion_from_euler
 from visualization_msgs.msg import Marker
 from math import radians, pi
 
+
 class MoveBaseSquare():
     def __init__(self):
         rospy.init_node('box_client', anonymous=False)
@@ -20,7 +21,7 @@ class MoveBaseSquare():
 
         # Append each of the four waypoints to the list.  Each waypoint
         # is a pose consisting of a position and orientation in the map frame.
-        waypoints.append(Pose(Point(10.0, 0.62, 0.0), Quaternion(0,0,0,1)))
+        waypoints.append(Pose(Point(10.0, 0.62, 0.0), Quaternion(0, 0, 0, 1)))
 
         # Initialize the visualization markers for RViz
         self.init_markers()
@@ -68,26 +69,26 @@ class MoveBaseSquare():
             i += 1
 
     def move(self, goal):
-            # Send the goal pose to the MoveBaseAction server
-            self.move_base.send_goal(goal)
+        # Send the goal pose to the MoveBaseAction server
+        self.move_base.send_goal(goal)
 
-            # Allow 1 minute to get there
-            finished_within_time = self.move_base.wait_for_result(rospy.Duration(60))
+        # Allow 1 minute to get there
+        finished_within_time = self.move_base.wait_for_result(rospy.Duration(60))
 
-            # If we don't get there in time, abort the goal
-            if not finished_within_time:
-                self.move_base.cancel_goal()
-                rospy.loginfo("Timed out achieving goal")
-            else:
-                # We made it!
-                state = self.move_base.get_state()
-                if state == GoalStatus.SUCCEEDED:
-                    rospy.loginfo("Goal succeeded!")
+        # If we don't get there in time, abort the goal
+        if not finished_within_time:
+            self.move_base.cancel_goal()
+            rospy.loginfo("Timed out achieving goal")
+        else:
+            # We made it!
+            state = self.move_base.get_state()
+            if state == GoalStatus.SUCCEEDED:
+                rospy.loginfo("Goal succeeded!")
 
     def init_markers(self):
         # Set up our waypoint markers
         marker_scale = 0.2
-        marker_lifetime = 0 # 0 is forever
+        marker_lifetime = 0  # 0 is forever
         marker_ns = 'waypoints'
         marker_id = 0
         marker_color = {'r': 1.0, 'g': 0.7, 'b': 1.0, 'a': 1.0}

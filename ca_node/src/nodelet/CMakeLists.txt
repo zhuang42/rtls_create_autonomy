@@ -2,10 +2,10 @@
 # NODELET
 ##############################################################################
 
-add_library(ca_nodelet ca_nodelet.cpp)
-add_dependencies(ca_nodelet ca_driver)
-target_link_libraries(ca_nodelet)
+add_library(${PROJECT_NAME}let ${PROJECT_NAME}let.cpp)
+add_dependencies(${PROJECT_NAME}let ca_driver)
+target_link_libraries(${PROJECT_NAME}let)
 
-install(TARGETS ca_nodelet
+install(TARGETS ${PROJECT_NAME}let
         DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
