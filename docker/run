@@ -1,0 +1,86 @@
+#!/usr/bin/env python
+
+"""
+Author:     Diego Maldonado (@dmnunez1993)
+Maintainer: Emiliano Borghi (@eborghi10)
+"""
+
+import argparse
+import subprocess
+import docker_utils as ut
+import os
+
+IMAGE_NAME = "robotica_utn_frba"
+WS_NAME    = "create_ws"
+
+def run_dev_environment(command, ros="melodic", gazebo="9"):
+    user = ut.get_user()
+    docker_args = []
+    dockerfile  = "create_ros_{}_gazebo{}".format(ros, gazebo)
+    temp_volume = "/home/{}/.{}".format(user, IMAGE_NAME)
+
+    docker_args.append("-it")
+    docker_args.append("--rm")
+    docker_args.append("--env=\"DISPLAY\"")
+    docker_args.append("--volume=\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"")
+    docker_args.append("--volume=\"$HOME/.Xauthority:/root/.Xauthority:rw\"")
+    docker_args.append("--name=\"{}\"".format(IMAGE_NAME))
+    docker_args.append("--privileged")
+    docker_args.append("--network=\"host\"")
+    docker_args.append("--user {0}:{0}".format(ut.get_uid()))
+    # Keep user settings
+    docker_args.append("--volume {}/user/:/home/{}/".format(temp_volume, user))
+    # Mount workspace
+    docker_args.append("--volume {}:/{}/src".format(os.path.dirname(ut.get_repo_root()), WS_NAME))
+    docker_args.append("--volume {}/ws/build/:/{}/build/".format(temp_volume, WS_NAME))
+    docker_args.append("--volume {}/ws/devel/:/{}/devel/".format(temp_volume, WS_NAME))
+
+    docker_args.append("--volume /dev/bus/usb:/dev/bus/usb")
+    docker_args.append("-e ROS_HOSTNAME=localhost")
+    docker_args.append("-e ROS_MASTER_URI=http://localhost:11311")
+    docker_args.append("--workdir /{}/".format(WS_NAME))
+
+    if ut.is_nvidia():
+        docker_args.append("--runtime=\"nvidia\"")
+        dockerfile = 'create_{}_nvidia'.format(ros)
+
+    # Join arguments together separated by a space
+    docker_args = ' '.join(docker_args)
+    docker_command = "docker run {} {} {}".format(docker_args, dockerfile, command)
+
+    ut.create_directory("{}/user/".format(temp_volume))
+    ut.create_directory("{}/ws/build/".format(temp_volume))
+    ut.create_directory("{}/ws/devel/".format(temp_volume))
+
+    ut.run_command("xhost +local:root")
+    ut.run_command(docker_command)
+    ut.run_command("xhost -local:root")
+
+def attach_dev_environment(command, ros="melodic", gazebo="9"):
+    command = 'docker exec -it --user {0}:{0} {1} {2}'.format(ut.get_uid(), IMAGE_NAME, command)
+    ut.run_command(command)
+
+def is_running():
+    command = 'docker ps | grep {} > /dev/null'.format(IMAGE_NAME)
+    try:
+        subprocess.check_call(command, shell=True)
+    except Exception:
+        return False
+
+    return True
+
+def main():
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--cmd', dest='command', default='tmux')
+    parser.add_argument('-g', '--gazebo', dest="gazebo_version", default="9")
+    parser.add_argument('-r', '--ros', dest="ros_version", default="melodic")
+    args = parser.parse_args()
+
+    if not is_running():
+        run_dev_environment(args.command, ros=args.ros_version, gazebo=args.gazebo_version)
+    else:
+        attach_dev_environment(args.command, ros=args.ros_version, gazebo=args.gazebo_version)
+
+if __name__ == '__main__':
+    main()

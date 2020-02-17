@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+
+"""
+Author:     Diego Maldonado (@dmnunez1993)
+Maintainer: Emiliano Borghi (@eborghi10)
+"""
+
+import argparse
+import docker_utils as ut
+import os
+
+def main():
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-g', '--gazebo', dest="gazebo_version", default="9")
+    parser.add_argument('-r', '--ros', dest="ros_version", default="melodic")
+    args = parser.parse_args()
+
+    # Select image to compile
+    image_name = 'create_{}_nvidia'.format(args.ros_version) \
+            if ut.is_nvidia() \
+            else 'create_ros_{}_gazebo{}'.format(args.ros_version, args.gazebo_version)
+
+    # Build selected image
+    command = 'cd {} && make {}'.format(os.path.join(ut.get_repo_root(), 'docker'), image_name)
+    ut.run_command(command)
+
+if __name__ == '__main__':
+    main()
