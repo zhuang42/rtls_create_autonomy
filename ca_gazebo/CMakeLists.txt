@@ -3,7 +3,7 @@ project(ca_gazebo)
 
 add_compile_options(-std=c++11)
 
-find_package(gazebo REQUIRED)
+find_package(gazebo 9 REQUIRED)
 
 find_package(catkin REQUIRED
   COMPONENTS
@@ -23,7 +23,9 @@ catkin_package(
 	LIBRARIES
 		create_bumper_plugin
 		model_pose_publisher_plugin
+		traffic_light_plugin
 		${trajectory_actor_plugin_name}
+		world_time_publisher
   CATKIN_DEPENDS
     ca_msgs
 )
@@ -148,6 +150,17 @@ add_library(model_pose_publisher_plugin src/model_pose_publisher_plugin.cpp)
 target_link_libraries(model_pose_publisher_plugin
 	${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
+add_library(traffic_light_plugin src/traffic_light_plugin.cpp)
+add_dependencies(traffic_light_plugin ${catkin_EXPORTED_TARGETS})
+target_link_libraries(traffic_light_plugin
+	${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(world_time_publisher src/world_time_publisher.cpp)
+add_dependencies(world_time_publisher ${catkin_EXPORTED_TARGETS})
+target_link_libraries(world_time_publisher
+	${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+
 install(DIRECTORY
 			launch
 			media
@@ -162,6 +175,8 @@ install(DIRECTORY include/${PROJECT_NAME}/
 install(TARGETS
 		create_bumper_plugin
 		model_pose_publisher_plugin
+		traffic_light_plugin
+		world_time_publisher
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
