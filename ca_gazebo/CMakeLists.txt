@@ -220,6 +220,11 @@ install(TARGETS
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+install(DIRECTORY scripts
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+        USE_SOURCE_PERMISSIONS
+)
+
 #############
 ## Testing ##
 #############
@@ -232,4 +237,5 @@ if(CATKIN_ENABLE_TESTING)
   # Tests list
   add_rostest(test/hz.test)
   add_rostest(test/publish.test)
+  add_rostest(test/static.test)
 endif()
