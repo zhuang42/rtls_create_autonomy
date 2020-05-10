@@ -28,7 +28,7 @@ DWAPlannerROS:
   theta_stopped_vel: 0.4
 
   acc_lim_x: 0.8
-  acc_lim_theta: 2.0
+  acc_lim_theta: 5.0
   acc_lim_y: 0.0      # diff drive robot
 
 # Goal Tolerance Parameters
@@ -37,9 +37,9 @@ DWAPlannerROS:
   # latch_xy_goal_tolerance: false
 
 # Forward Simulation Parameters
-  sim_time: 1.0       # 1.7
-  vx_samples: 6       # 3
-  vy_samples: 1       # diff drive robot, there is only one sample
+  sim_time: 2.0       # 1.7
+  vx_samples: 10       # 3
+  vy_samples: 10       # diff drive robot, there is only one sample
   vtheta_samples: 20  # 20
 
 # Trajectory Scoring Parameters
@@ -55,8 +55,8 @@ DWAPlannerROS:
   oscillation_reset_dist: 0.05  # 0.05   - how far to travel before resetting oscillation flags
 
 # Debugging
-  publish_traj_pc : true
-  publish_cost_grid_pc: true
+  publish_cost_grid: true
 
-# Differential-drive robot configuration - necessary?
-  holonomic_robot: false
+# Defines whether or not to eat up the plan as the robot moves along the path.
+# If set to true, points will fall off the end of the plan once the robot moves 1 meter past them.
+  prune_plan: true
