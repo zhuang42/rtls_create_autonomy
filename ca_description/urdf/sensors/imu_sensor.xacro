@@ -23,6 +23,10 @@
     </visual>
   </link>
 
+  <gazebo reference="${link_name}">
+    <material>Gazebo/BlueGlow</material>
+  </gazebo>
+
   <gazebo>
     <plugin name="${name}" filename="libgazebo_ros_imu.so">
       <alwaysOn>true</alwaysOn>
