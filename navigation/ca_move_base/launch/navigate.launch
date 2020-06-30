@@ -49,4 +49,15 @@
   <include if="$(eval arg('localization')=='octomap')"
            file="$(find ca_move_base)/launch/octomap_mapping.launch"/>
 
+  <!-- Hector SLAM -->
+  <include if="$(eval arg('localization')=='hector_mapping')"
+           file="$(find ca_hector)/launch/default_mapping.launch">
+  </include>
+
+  <!-- Hector SLAM + geotiff -->
+  <include if="$(eval arg('localization')=='hector_geotiff')"
+           file="$(find ca_hector)/launch/geotiff_mapping.launch">
+    <arg name="env"      value="$(arg env)"/>
+  </include>
+
 </launch>
