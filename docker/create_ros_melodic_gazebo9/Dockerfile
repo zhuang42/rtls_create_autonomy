@@ -48,6 +48,7 @@ RUN sudo apt-get install -qq -y libqt4-dev
 # Disable OpenGL for this application
 ENV CI=true
 RUN /bin/bash ${IMU_SCRIPT}
+RUN rm -r ${IMU_SCRIPT}
 
 # Install dependencies with vcs
 # http://wiki.ros.org/catkin/Tutorials/using_a_workspace#Installing_Packages
