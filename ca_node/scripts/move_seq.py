@@ -12,11 +12,13 @@ import numpy as np
 current_pos = geometry_msgs.msg.Pose2D()
 pose2d_pub = None
 move_pub = None
+
+
 def odom_callback(msg):
     """
     msg: nav_msgs
     """
-    
+
     current_pos.x = msg.pose.pose.position.x
     current_pos.y = msg.pose.pose.position.y
 
@@ -30,10 +32,10 @@ def odom_callback(msg):
 
     current_pos.theta = yaw
 
-    rospy.loginfo("{} {} {}".format(msg.pose.pose.position.x, msg.pose.pose.position.y, yaw))
+    # rospy.loginfo("{} {} {}".format(msg.pose.pose.position.x, msg.pose.pose.position.y, yaw))
 
 
-def move_forward(meter, max_vel = 0.2):
+def move_forward(meter, max_vel=0.2):
 
     initx, inity = current_pos.x, current_pos.y
 
@@ -41,9 +43,9 @@ def move_forward(meter, max_vel = 0.2):
     goaly = inity + meter * math.sin(current_pos.theta)
 
     #rospy.loginfo("{} {}".format(goalx, goaly))
-    
+
     rate = rospy.Rate(30.0)
-    
+
     rospy.loginfo("move forward")
     # https://en.wikipedia.org/wiki/Proportional_control
     # Simple P controler
@@ -52,10 +54,10 @@ def move_forward(meter, max_vel = 0.2):
 
         move = geometry_msgs.msg.Twist()
 
-        et = math.sqrt((goalx - current_pos.x) ** 2 +   (goaly - current_pos.y) ** 2)
+        et = math.sqrt((goalx - current_pos.x) ** 2 + (goaly - current_pos.y) ** 2)
         P0 = 0.01
         KP = 0.5
-        
+
         Pout = min(max_vel - P0, KP * et) + P0
         move.linear.x = Pout
         move.angular.z = 0
@@ -65,7 +67,8 @@ def move_forward(meter, max_vel = 0.2):
     move = geometry_msgs.msg.Twist()
     move_pub.publish(move)
 
-def move_backward(meter, max_vel = 0.2):
+
+def move_backward(meter, max_vel=0.2):
 
     initx, inity = current_pos.x, current_pos.y
 
@@ -73,9 +76,9 @@ def move_backward(meter, max_vel = 0.2):
     goaly = inity + -meter * math.sin(current_pos.theta)
 
     #rospy.loginfo("{} {}".format(goalx, goaly))
-    
+
     rate = rospy.Rate(30.0)
-    
+
     rospy.loginfo("move forward")
     # https://en.wikipedia.org/wiki/Proportional_control
     # Simple P controler
@@ -84,10 +87,10 @@ def move_backward(meter, max_vel = 0.2):
 
         move = geometry_msgs.msg.Twist()
 
-        et = math.sqrt((goalx - current_pos.x) ** 2 +   (goaly - current_pos.y) ** 2)
+        et = math.sqrt((goalx - current_pos.x) ** 2 + (goaly - current_pos.y) ** 2)
         P0 = 0.02
         KP = 0.5
-        
+
         Pout = min(max_vel - P0, KP * et) + P0
         move.linear.x = -Pout
         move.angular.z = 0
@@ -97,23 +100,25 @@ def move_backward(meter, max_vel = 0.2):
     move = geometry_msgs.msg.Twist()
     move_pub.publish(move)
 
-def turn_cw(rad, max_radv = 0.2):
-    init_theta = current_pos.theta
 
+def turn_cw(degree, max_radv=0.2):
+
+    rad = degree * math.pi / 180.0
+
+    init_theta = current_pos.theta
 
     rate = rospy.Rate(30.0)
     rospy.loginfo("turn clockwise")
     while True:
-        rad_sofar = abs(current_pos.theta -  init_theta)
+        rad_sofar = abs(current_pos.theta - init_theta)
         if rad_sofar > math.pi:
             rad_sofar = 2 * math.pi - rad_sofar
-        
 
         if rad_sofar > rad:
             break
 
         move = geometry_msgs.msg.Twist()
-        
+
         et = rad - rad_sofar
 
         P0 = 0.02
@@ -128,22 +133,24 @@ def turn_cw(rad, max_radv = 0.2):
     move = geometry_msgs.msg.Twist()
     move_pub.publish(move)
 
-def turn_ccw(rad, max_radv = 0.2):
-    init_theta = current_pos.theta
 
+def turn_ccw(degree, max_radv=0.2):
+    rad = degree * math.pi / 180.0
+
+    init_theta = current_pos.theta
 
     rate = rospy.Rate(30.0)
     rospy.loginfo("turn clockwise")
     while True:
-        rad_sofar = abs(current_pos.theta -  init_theta)
+        rad_sofar = abs(current_pos.theta - init_theta)
         if rad_sofar > math.pi:
             rad_sofar = 2 * math.pi - rad_sofar
-        
+
         if rad_sofar > rad:
             break
 
         move = geometry_msgs.msg.Twist()
-        
+
         et = rad - rad_sofar
 
         P0 = 0.05
@@ -162,38 +169,42 @@ def turn_ccw(rad, max_radv = 0.2):
 def main():
     global pose2d_pub
     global move_pub
-
-
     rospy.init_node('move_pub', log_level=rospy.INFO)
-
     rospy.loginfo('start')
-
     odom_sub = rospy.Subscriber("odom", nav_msgs.msg.Odometry, odom_callback)
     move_pub = rospy.Publisher("cmd_vel", geometry_msgs.msg.Twist)
-    rospy.sleep(1) # wait odom sub to update current odometry data
+    rospy.sleep(1)  # wait odom sub to update current odometry data
     
-    move_forward(2)
-    move_backward(2)
-    move_forward(2)
-    move_backward(2)
-    # turn_cw(math.pi/2)
-    # move_forward(2)
-    # turn_cw(math.pi/2)
-    # move_forward(2)
-    # turn_cw(math.pi/2)
-    # move_forward(2)
-    # turn_cw(math.pi/2)
-    # move_forward(2)
-    # turn_cw(math.pi/2)
-    # move_forward(2)
-    # turn_cw(math.pi/2)
+    command_dispatcher = {
+        "moveforward": move_forward,
+        "movebackward": move_backward,
+        "turncw": turn_cw,
+        "turnccw": turn_ccw
+    }
+    while True:
+        print("Ready to take input: ")
 
+        raw_input_list = raw_input().split()
+
+        if len(raw_input_list) != 2:
+            rospy.loginfo("Invalid command format {}".format(raw_input_list))
+            continue
+        
+        command, arg = raw_input_list
+        arg = arg.strip()
+        command = command.strip()
+        if command not in command_dispatcher.keys():
+            rospy.loginfo("Invalid command {}".format(command))
+
+        rospy.loginfo("Excuting command {} {}".format(command, arg))
+        command_dispatcher[command](float(arg))
 
     rospy.spin()
+
 
 if __name__ == '__main__':
     try:
         while not rospy.is_shutdown():
             main()
     except rospy.ROSInterruptException:
-        pass
+        exit()
