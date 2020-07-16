@@ -5,7 +5,6 @@ import math
 import tf
 import geometry_msgs.msg
 import nav_msgs.msg
-import typing
 import numpy as np
 
 # Global variable
@@ -195,6 +194,7 @@ def main():
         command = command.strip()
         if command not in command_dispatcher.keys():
             rospy.loginfo("Invalid command {}".format(command))
+            continue
 
         rospy.loginfo("Excuting command {} {}".format(command, arg))
         command_dispatcher[command](float(arg))
