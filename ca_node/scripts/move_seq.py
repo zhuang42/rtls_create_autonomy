@@ -100,6 +100,11 @@ def move_backward(meter, max_vel=0.2):
     move_pub.publish(move)
 
 
+def get_angle_diff(a1, a2):
+    diff = a1 - a2
+    return math.atan2(math.sin(diff), math.cos(diff))
+
+
 def turn_cw(degree, max_radv=0.2):
 
     rad = degree * math.pi / 180.0
@@ -107,13 +112,13 @@ def turn_cw(degree, max_radv=0.2):
     init_theta = current_pos.theta
 
     rate = rospy.Rate(30.0)
-    rospy.loginfo("turn clockwise")
+    rospy.loginfo("Turning clockwise")
     while True:
-        rad_sofar = abs(current_pos.theta - init_theta)
-        if rad_sofar > math.pi:
-            rad_sofar = 2 * math.pi - rad_sofar
+        rad_sofar = get_angle_diff(init_theta, current_pos.theta)
+        if rad_sofar < -1e-02:
+            break
 
-        if rad_sofar > rad:
+        if rad_sofar >= rad:
             break
 
         move = geometry_msgs.msg.Twist()
@@ -131,6 +136,8 @@ def turn_cw(degree, max_radv=0.2):
 
     move = geometry_msgs.msg.Twist()
     move_pub.publish(move)
+    rate.sleep()
+    move_pub.publish(move)
 
 
 def turn_ccw(degree, max_radv=0.2):
@@ -139,13 +146,13 @@ def turn_ccw(degree, max_radv=0.2):
     init_theta = current_pos.theta
 
     rate = rospy.Rate(30.0)
-    rospy.loginfo("turn clockwise")
+    rospy.loginfo("Turning coutner clockwise")
     while True:
-        rad_sofar = abs(current_pos.theta - init_theta)
-        if rad_sofar > math.pi:
-            rad_sofar = 2 * math.pi - rad_sofar
+        rad_sofar = get_angle_diff(current_pos.theta, init_theta)
 
-        if rad_sofar > rad:
+        if rad_sofar < -1e-02:
+            break
+        if rad_sofar >= rad:
             break
 
         move = geometry_msgs.msg.Twist()
@@ -163,6 +170,8 @@ def turn_ccw(degree, max_radv=0.2):
 
     move = geometry_msgs.msg.Twist()
     move_pub.publish(move)
+    rate.sleep()
+    move_pub.publish(move)
 
 
 def main():
@@ -173,12 +182,12 @@ def main():
     odom_sub = rospy.Subscriber("odom", nav_msgs.msg.Odometry, odom_callback)
     move_pub = rospy.Publisher("cmd_vel", geometry_msgs.msg.Twist)
     rospy.sleep(1)  # wait odom sub to update current odometry data
-    
+
     command_dispatcher = {
-        "moveforward": move_forward,
-        "movebackward": move_backward,
+        "forward": move_forward,
+        "backward": move_backward,
         "turncw": turn_cw,
-        "turnccw": turn_ccw
+        "turnccw": turn_ccw,
     }
     while True:
         print("Ready to take input: ")
@@ -188,7 +197,7 @@ def main():
         if len(raw_input_list) != 2:
             rospy.loginfo("Invalid command format {}".format(raw_input_list))
             continue
-        
+
         command, arg = raw_input_list
         arg = arg.strip()
         command = command.strip()
