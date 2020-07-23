@@ -1,0 +1,20 @@
+<launch>
+  <arg name="robot_id"  default="$(optenv ID 1)"      doc="Unique identifier of the robot [1-Inf.)"/>
+  <arg name="ns"        value="create$(arg robot_id)" doc="Namespace of the robot. By default: create1"/>
+
+  <arg name="use_nodelets" default="$(optenv NODELET true)"
+			 doc="Use nodelets: http://wiki.ros.org/nodelet" />
+
+  <arg name="ros_control" default="$(optenv ROS_CONTROL False)" doc="Use ros_control"/>
+  <arg name="raspicam_receiver_IP" default=""         doc="Raspicam client IP"/>
+
+  <arg name="laser" default="$(optenv LASER)"      doc="Laser for mapping the environment"/>
+  <arg name="rviz"  default="$(optenv RVIZ false)" doc="Flag to use RViz"/>
+  <arg name="imu"   default="$(optenv IMU true)"   doc="Flag to use the IMU MPU9255"/>
+
+  <param name="tf_prefix" value="create$(arg robot_id)_tf" />
+
+  <!-- Only run driver locally, where roscore runs remotely -->
+  <include file="$(find ca_node)/launch/create_2.launch"  />
+
+</launch>
