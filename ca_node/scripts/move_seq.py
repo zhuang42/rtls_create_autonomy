@@ -125,7 +125,7 @@ def turn_cw(degree, max_radv=0.2):
 
         et = rad - rad_sofar
 
-        P0 = 0.02
+        P0 = 0.1
         KP = 0.5
         Pout = min(max_radv - P0, KP * et) + P0
 
@@ -159,7 +159,7 @@ def turn_ccw(degree, max_radv=0.2):
 
         et = rad - rad_sofar
 
-        P0 = 0.05
+        P0 = 0.1
         KP = 0.5
         Pout = min(max_radv - P0, KP * et) + P0
 
@@ -184,10 +184,10 @@ def main():
     rospy.sleep(1)  # wait odom sub to update current odometry data
 
     command_dispatcher = {
-        "forward": move_forward,
-        "backward": move_backward,
-        "turncw": turn_cw,
-        "turnccw": turn_ccw,
+        "f": move_forward,
+        "b": move_backward,
+        "l": turn_cw,
+        "r": turn_ccw,
     }
     while True:
         print("Ready to take input: ")
