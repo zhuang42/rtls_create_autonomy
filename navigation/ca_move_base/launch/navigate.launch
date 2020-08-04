@@ -60,7 +60,7 @@
 
   <!-- Hector SLAM -->
   <include if="$(eval arg('localization')=='hector_mapping')"
-           file="$(find ca_hector)/launch/default_mapping.launch">
+           file="$(find ca_hector)/launch/ireland_office_mapping.launch">
   </include>
 
   <!-- Hector SLAM + geotiff -->

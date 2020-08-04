@@ -5,3 +5,5 @@
 # you have to add an empty CATKIN_IGNORE inside the package
 # http://wiki.ros.org/catkin/workspaces#Catkin_Workspaces
 CATKIN_IGNORE
+build
+
