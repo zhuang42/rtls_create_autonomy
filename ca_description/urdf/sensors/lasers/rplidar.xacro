@@ -19,7 +19,8 @@
 <xacro:property name="topic_name"    value="${name}/scan"/>
 
 <joint name="${name}_joint" type="fixed">
-  <origin xyz="${laser_origin}" rpy="0 0 ${pi}"/>
+  <!-- <origin xyz="${laser_origin}" rpy="0 0 ${pi}"/> -->
+  <origin xyz="${laser_origin}" rpy="0 0 0"/>
   <parent link="${parent_link}"/>
   <child link="${link_name}"/>
 </joint>
