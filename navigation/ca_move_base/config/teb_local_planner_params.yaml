@@ -28,10 +28,10 @@ TebLocalPlannerROS:
 
  # Robot
 
- max_vel_x: 0.4
+ max_vel_x: 0.2
  max_vel_x_backwards: 0.2 # Set a little lower than forward vel, since it doesn't have bumpers in the back
  max_vel_y: 0.0
- max_vel_theta: 1.
+ max_vel_theta: 0.5
  acc_lim_x: 0.5
  acc_lim_theta: 1.
  min_turning_radius: 0.0 # diff-drive robot (can turn on place!)
