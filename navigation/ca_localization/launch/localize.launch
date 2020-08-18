@@ -24,6 +24,7 @@
   </node>
 
   <!-- RViz -->
-  <arg name="rviz" default="false"/>
-  <include if="$(arg rviz)" file="$(find ca_tools)/launch/rviz.launch"/>
+  <!-- Remove RViz here -->
+  <!-- <arg name="rviz" default="false"/>
+  <include if="$(arg rviz)" file="$(find ca_tools)/launch/rviz.launch"/> -->
 </launch>

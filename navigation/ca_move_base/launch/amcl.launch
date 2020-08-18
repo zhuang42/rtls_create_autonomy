@@ -5,6 +5,10 @@
 
   <arg name="laser" default="$(optenv LASER rplidar)" doc="Laser for mapping the environment"/>
 
+  <include file="$(find ca_move_base)/launch/amcl_initial_pose.launch"> </include>
+  
+
+
   <node pkg="amcl" type="amcl" name="amcl" output="screen">
     <rosparam file="$(find ca_move_base)/config/amcl_params.yaml" command="load"/>
     <!-- We want a single map for multi-robots -->
@@ -16,5 +20,9 @@
     <param name="odom_frame_id" value="$(arg tf_prefix)/odom"/>
     <param name="base_frame_id" value="$(arg tf_prefix)/base_footprint"/>
   </node>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_frame_publisher" args="0 0 0 0 0 0 1 map world" />
+
+
 
 </launch>
