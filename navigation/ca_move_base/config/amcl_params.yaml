@@ -12,12 +12,16 @@ min_particles: 500
 max_particles: 2000
 kld_err: 0.05
 kld_z: 0.99
-odom_alpha1: 0.2
+# Specifies the expected noise in odometry's rotation estimate from the rotational component of the robot's motion. 
+odom_alpha1: 4
+# Specifies the expected noise in odometry's rotation estimate from translational component of the robot's motion. 
 odom_alpha2: 0.2
-odom_alpha5: 0.1
+# odom_alpha5: 0.1
 
 # translation std dev, m
+# Specifies the expected noise in odometry's translation estimate from the translational component of the robot's motion. 
 odom_alpha3: 0.2
+# Specifies the expected noise in odometry's translation estimate from the rotational component of the robot's motion. 
 odom_alpha4: 0.2
 laser_z_hit: 0.5
 laser_z_short: 0.05

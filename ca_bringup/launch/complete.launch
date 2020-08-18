@@ -4,7 +4,7 @@
   <arg name="tf_prefix" value="$(arg ns)_tf"          doc="Tf prefix"/>
 
   <arg name="laser" default="$(optenv LASER rplidar)" doc="Laser for mapping the environment"/>
-  <arg name="env" default="empty" doc="Name of the environment"/>
+  <arg name="env" default="$(optenv ENV empty)" doc="Name of the environment"/>
 	<arg name="localization" default="$(optenv LOCALIZATION none)"
        doc="Localization type. More options here: https://github.com/RoboticaUtnFrba/create_autonomy/wiki/Launching-options"/>
 

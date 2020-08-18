@@ -8,6 +8,7 @@ Panels:
         - /Robot description1/TF1
         - /Robot description1/TF1/Frames1
         - /Sensors1
+        - /Sensors1/RPLidar A21
         - /Localization1
         - /Localization1/Wheel odometry1
         - /Localization1/odom_imu1
@@ -36,7 +37,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: RPLidar A2
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -205,6 +206,8 @@ Visualization Manager:
               Value: false
             map:
               Value: true
+            world:
+              Value: true
           Marker Scale: 1
           Name: TF
           Show Arrows: true
@@ -245,6 +248,8 @@ Visualization Manager:
                     {}
                   create1_tf/wheel_right_link:
                     {}
+              world:
+                {}
           Update Interval: 0
           Value: true
       Enabled: true
@@ -272,24 +277,24 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 0
-          Enabled: false
+          Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 0
+          Max Intensity: 47
           Min Color: 0; 0; 0
-          Min Intensity: 0
+          Min Intensity: 47
           Name: RPLidar A2
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
-          Size (m): 0.009999999776482582
+          Size (m): 0.10000000149011612
           Style: Flat Squares
           Topic: /create1/rplidar/scan
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: false
+          Value: true
       Enabled: true
       Name: Sensors
     - Class: rviz/Group
@@ -763,15 +768,15 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 10.256771087646484
+      Distance: 44.39310836791992
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.9964699745178223
-        Y: -1.0421351194381714
+        X: -0.7192850112915039
+        Y: 0.22618234157562256
         Z: -9.5367431640625e-7
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
@@ -800,4 +805,4 @@ Window Geometry:
     collapsed: true
   Width: 1687
   X: 793
-  Y: 102
+  Y: 27

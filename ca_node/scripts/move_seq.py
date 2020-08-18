@@ -113,7 +113,7 @@ def turn_cw(degree, max_radv=0.2):
 
     rate = rospy.Rate(30.0)
     rospy.loginfo("Turning clockwise")
-    while True:
+    while not rospy.is_shutdown():
         rad_sofar = get_angle_diff(init_theta, current_pos.theta)
         if rad_sofar < -1e-02:
             break

@@ -19,7 +19,7 @@ map_resolution: 0.050
 map_start_x: 0.50
 map_start_y: 0.50
 map_multi_res_levels: 3 # default here
-map_size: 4096
+map_size: 3072
 
 # Map update parameters
 update_factor_free: 0.4

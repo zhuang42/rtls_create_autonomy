@@ -9,7 +9,7 @@ repositories:
     version: master
   hector_slam:
     type: git
-    url: https://github.com/RoboticaUtnFrba/hector_slam.git
+    url: https://github.com/zhuang42/hector_slam.git
     version: melodic-devel
   i2c_imu:
     type: git
