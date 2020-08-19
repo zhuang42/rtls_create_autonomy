@@ -63,6 +63,10 @@
            file="$(find ca_hector)/launch/ireland_office_mapping.launch">
   </include>
 
+  <include if="$(eval arg('localization')=='hector_localization')"
+           file="$(find ca_hector)/launch/ireland_office_localization.launch">
+  </include>
+
   <!-- Hector SLAM + geotiff -->
   <include if="$(eval arg('localization')=='hector_geotiff')"
            file="$(find ca_hector)/launch/geotiff_mapping.launch">

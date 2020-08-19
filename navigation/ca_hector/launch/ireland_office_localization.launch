@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!-- NOTE:
+1. Maps created with Hector SLAM break with the create's odom shift:
+For the gazebo house environment, the maps created with Hector SLAM
+place the (0, 0) at the start position of the robot and not at Gazebo's
+(0,0). This will break when applying odom's shift for the create, as
+it will push the robot out of the map.
+
+This issue is being addressed at
+https://github.com/RoboticaUtnFrba/create_autonomy/pull/214.
+
+2. If you launch hector mapping without geotiff, you can save the
+map using the map server:
+
+rosrun map_server map_saver -f my_map
+-->
+
+<launch>
+  <!-- Create and robot number identifiers -->
+  <arg name="robot_id"  default="$(optenv ID 1)"      doc="Unique identifier of the robot [1-Inf.)"/>
+  <arg name="ns"        value="create$(arg robot_id)" doc="Namespace of the robot. By default: create1"/>
+  <arg name="tf_prefix" value="$(arg ns)_tf"          doc="Tf prefix"/>
+
+  <arg name="laser" value="$(optenv LASER rplidar)" doc="Laser for mapping the environment"/>
+  <arg name="use_static_map" default="true"/>
+
+  <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" output="screen">
+    <rosparam file="$(find ca_hector)/config/hector_localization_ireland.yaml" command="load"/>
+
+    <!-- Frame names -->
+    <param name="base_frame" value="$(arg tf_prefix)/base_link" />
+    <param name="odom_frame" value="$(arg tf_prefix)/odom" />
+    <param name="use_static_map" value="$(arg use_static_map)" />
+
+    <!-- Advertising config -->
+    <param name="scan_topic" value="$(arg laser)/scan"/>
+
+    <!-- Remapping -->
+    <remap from="/$(arg ns)/map" to="/map" />
+    <remap from="/$(arg ns)/map_metadata" to="/map_metadata"/>
+  </node>
+
+  <arg name="env" default="$(optenv ENV empty)" doc="Name of the environment that is used to load the map"/>
+	<arg name="map_file" value="$(find ca_move_base)/maps/$(arg env).yaml"/>
+  <!-- Run the map server node with a predefined map -->
+  <node name="static_map" pkg="map_server" type="map_server" args="$(arg map_file)">
+    <param name="frame_id" value="map"/>
+    <remap from="map" to="/map_hector_init"/>
+    <remap from="map_metadata" to="/map_metadata_hector_init"/>
+  </node>
+
+</launch>
+
+
