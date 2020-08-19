@@ -50,6 +50,10 @@ rosrun map_server map_saver -f my_map
     <remap from="map_metadata" to="/map_metadata_hector_init"/>
   </node>
 
+  <!-- publishe world frame  -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_frame_publisher" args="10.1177978516 6.69630002975 0 0 0 -0.999915520205 0.0129981711812 map world" />
+
+
 </launch>
 
 
