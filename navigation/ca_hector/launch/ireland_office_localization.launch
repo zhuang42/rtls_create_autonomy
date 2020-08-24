@@ -53,7 +53,11 @@ rosrun map_server map_saver -f my_map
   <!-- publishe world frame  -->
   <node pkg="tf2_ros" type="static_transform_publisher" name="world_frame_publisher" args="10.1177978516 6.69630002975 0 0 0 -0.999915520205 0.0129981711812 map world" />
 
-
+  <!-- publishe access point frame  -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_frame_publisher" args="0.389 24.576 0 0 0 0 1 world AP3" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_frame_publisher" args="13.02206184 18.87172248 0 0 0 0 1 world AP0" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_frame_publisher" args="0.34478976 10.08763032 0 0 0 0 1 world AP1" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_frame_publisher" args="13.18817784 4.5945552 0 0 0 0 1 world AP2" />
 </launch>
 
 
