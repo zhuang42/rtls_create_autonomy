@@ -67,8 +67,8 @@
            file="$(find ca_hector)/launch/ireland_office_localization.launch">
   </include>
 
-  <include if="$(eval arg('localization')=='hector_localization')"
-           file="$(find ca_hector)/launch/ireland_office_localization_udpate.launch">
+  <include if="$(eval arg('localization')=='hector_localization_update')"
+           file="$(find ca_hector)/launch/ireland_office_localization_update.launch">
   </include>
 
   <!-- Hector SLAM + geotiff -->
